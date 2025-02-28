@@ -1,0 +1,21 @@
+.themepoint{
+    background-color: #33296b;
+}
+
+.btn{
+    background-color: #22bbd900;
+    border: 1px solid #22bbd9;
+    box-sizing: border-box;
+}
+
+.btn:hover{
+    background-color: #7ddef2;
+}
+
+.nav-link{
+    color: white;
+}
+
+.nav-link:hover{
+    color: #22bbd9;
+}
