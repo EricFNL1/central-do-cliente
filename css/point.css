@@ -248,3 +248,8 @@
 .accordion-body {
   background-color: #fff;
 }
+
+.faq-strip {
+  background-color: #f2f2f2; /* Cor de fundo para a faixa */
+  border-radius: 8px;        /* Borda arredondada opcional */
+}
