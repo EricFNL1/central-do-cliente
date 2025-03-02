@@ -49,3 +49,89 @@
     scrollbar-width: thin; /* "auto" ou "thin" */
   }
   
+  /* Botão de ajuda flutuante */
+.help-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background-color: #22bbd9;
+  color: #fff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  font-size: 24px;
+}
+
+/* Container do chat */
+.chat-container {
+  position: fixed;
+  bottom: 90px; /* 20px (botão) + 70px de distância */
+  right: 20px;
+  width: 300px;
+  max-width: 90%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabeçalho do chat */
+.chat-header {
+  background-color: #22bbd9;
+  color: #fff;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Botão de fechar no chat */
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Corpo do chat */
+.chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+/* Rodapé do chat */
+.chat-footer {
+  padding: 10px;
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.chat-footer input[type="text"] {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.chat-footer button {
+  margin-left: 5px;
+  background-color: #22bbd9;
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
