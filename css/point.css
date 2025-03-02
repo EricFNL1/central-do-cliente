@@ -135,3 +135,61 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+
+/* Seção de Jornada do Aprendizado */
+#jornada-aprendizado {
+  background-color: #fff; /* Fundo branco */
+  position: relative;     /* Para posicionar a seta */
+}
+
+/* Cards */
+.card-journey {
+  box-shadow: 0 2px 4px rgb(37, 195, 223);
+  transition: transform 0.2s ease;
+  border-radius: 6px;
+}
+
+.card-journey:hover {
+  transform: translateY(-3px);
+}
+
+/* Título do card */
+.card-journey .card-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Texto do card */
+.card-journey .card-text {
+  color: #666;
+}
+
+/* Link "Saiba mais" */
+.link-more {
+  color: #33296b; /* Exemplo de cor de destaque */
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.link-more:hover {
+  text-decoration: underline;
+}
+
+/* Ícone de seta à direita */
+.arrow-next {
+  position: absolute;
+  top: 50%;
+  right: -20px; /* Ajuste conforme layout */
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+}
+
+.arrow-next a {
+  color: #22bbd9;
+  text-decoration: none;
+}
+
+.arrow-next a:hover {
+  color: #ff8540;
+}
