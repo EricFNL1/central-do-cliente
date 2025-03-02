@@ -144,10 +144,25 @@
 }
 
 /* Cards */
+/* Para cada card, garantimos que ele seja posicionado de forma relativa */
 .card-journey {
+  position: relative;
   box-shadow: 0 2px 4px rgb(37, 195, 223);
   transition: transform 0.2s ease;
   border-radius: 6px;
+  /* Adicione um padding à direita para não sobrepor o conteúdo com a seta */
+  padding-right: 30px;
+}
+
+/* Pseudo-elemento para a seta */
+.card-journey::after {
+  content: "\2192";  /* Unicode para seta para a direita */
+  position: absolute;
+  top: 50%;
+  right: 10px;      /* 10px dentro do card; ajuste se necessário */
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  color: #22bbd9;
 }
 
 .card-journey:hover {
@@ -192,4 +207,44 @@
 
 .arrow-next a:hover {
   color: #ff8540;
+}
+
+/* Ajuste de cor do botão na coluna de FAQ */
+.btn.btn-outline-primary {
+  border-color: #22bbd9;
+  color: #22bbd9;
+}
+.btn.btn-outline-primary:hover {
+  background-color: #22bbd9;
+  color: #fff;
+}
+
+/* Background e estilo da terceira linha */
+.showcase .bg-light {
+  background-color: #f8f9fa !important; /* Ajuste de cor suave */
+}
+
+/* Para garantir que a coluna da direita tenha fundo branco */
+.showcase .bg-white {
+  background-color: #fff !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Se quiser remover margens extras do “my-auto” no accordion:
+.showcase .col-lg-8.my-auto {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+*/
+
+/* Opcional: estilo adicional para as perguntas do accordion */
+.accordion-button {
+  background-color: #fff;
+  color: #333;
+}
+.accordion-button:hover {
+  background-color: #f2f2f2;
+}
+.accordion-body {
+  background-color: #fff;
 }

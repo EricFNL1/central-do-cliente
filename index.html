@@ -168,54 +168,145 @@
       </div>
     </section>
 
-    <!-- Image Showcases (mantido) -->
-    <section class="showcase">
-      <div class="container-fluid p-0">
-        <div class="row g-0">
-          <div
-            class="col-lg-6 order-lg-2 text-white showcase-img"
-            style="background-image: url('assets/img/bg-showcase-1.jpg')"
-          ></div>
-          <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-            <h2>Fully Responsive Design</h2>
-            <p class="lead mb-0">
-              When you use a theme created by Start Bootstrap, you know that
-              the theme will look great on any device, whether it's a phone,
-              tablet, or desktop the page will behave responsively!
-            </p>
+<!-- Image Showcases (mantido) -->
+<section class="showcase">
+  <div class="container-fluid p-0">
+    <!-- Primeira linha -->
+    <div class="row g-0">
+      <div
+        class="col-lg-6 order-lg-2 text-white showcase-img"
+        style="background-image: url('img/img3.png')"
+      ></div>
+      <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+        <h2>Proporcionando o melhor para o cliente</h2>
+        <p class="lead mb-0">
+          Nosso sistema foi criado para oferecer a melhor experiência, 
+          independentemente do dispositivo. Explore funcionalidades modernas 
+          e um design responsivo que garante total praticidade.
+        </p>
+      </div>
+    </div>
+
+    <!-- Segunda linha -->
+    <div class="row g-0">
+      <div
+        class="col-lg-6 text-white showcase-img"
+        style="background-image: url('img/img2.png')"
+      ></div>
+      <div class="col-lg-6 my-auto showcase-text">
+        <h2>Melhorando a sua experiência</h2>
+        <p class="lead mb-0">
+          Atualizações constantes e feedback de nossos usuários nos ajudam 
+          a evoluir. Cada recurso é pensado para tornar seu dia a dia mais 
+          produtivo e eficiente.
+        </p>
+      </div>
+    </div>
+
+    <!-- Terceira linha: área de FAQ -->
+    <div class="row g-0 align-items-stretch bg-light">
+      <!-- Coluna da esquerda: texto e botão -->
+      <div class="col-lg-4 d-flex flex-column justify-content-center p-5">
+        <h3 class="mb-3">Perguntas frequentes</h3>
+        <p class="mb-4">
+          Encontre respostas para as dúvidas mais comuns. Se precisar de mais detalhes, 
+          entre em contato com nosso suporte ou clique no botão para buscar outras soluções.
+        </p>
+        <a href="#!" class="btn btn-outline-primary">
+          Clique Aqui →
+        </a>
+      </div>
+
+      <!-- Coluna da direita: accordion de perguntas -->
+      <div class="col-lg-8 p-5 my-auto bg-white">
+        <!-- Accordion do Bootstrap -->
+        <div class="accordion" id="faqAccordion">
+          <!-- FAQ 1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="false"
+                aria-controls="collapseOne"
+              >
+                Como acompanhar meus chamados?
+              </button>
+            </h2>
+            <div
+              id="collapseOne"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#faqAccordion"
+            >
+              <div class="accordion-body">
+                Acesse o painel <strong>“Meus Chamados”</strong> para visualizar o status 
+                de cada solicitação, bem como detalhes de cada atendimento.
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row g-0">
-          <div
-            class="col-lg-6 text-white showcase-img"
-            style="background-image: url('assets/img/bg-showcase-2.jpg')"
-          ></div>
-          <div class="col-lg-6 my-auto showcase-text">
-            <h2>Updated For Bootstrap 5</h2>
-            <p class="lead mb-0">
-              Newly improved, and full of great utility classes, Bootstrap 5 is
-              leading the way in mobile responsive web development! All of the
-              themes on Start Bootstrap are now using Bootstrap 5!
-            </p>
+
+          <!-- FAQ 2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo"
+                aria-expanded="false"
+                aria-controls="collapseTwo"
+              >
+                Como personalizar o Dashboard?
+              </button>
+            </h2>
+            <div
+              id="collapseTwo"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingTwo"
+              data-bs-parent="#faqAccordion"
+            >
+              <div class="accordion-body">
+                No menu de configurações, selecione quais métricas e widgets deseja exibir, 
+                adaptando o painel às suas necessidades.
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="row g-0">
-          <div
-            class="col-lg-6 order-lg-2 text-white showcase-img"
-            style="background-image: url('assets/img/bg-showcase-3.jpg')"
-          ></div>
-          <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-            <h2>Easy to Use & Customize</h2>
-            <p class="lead mb-0">
-              Landing Page is just HTML and CSS with a splash of SCSS for users
-              who demand some deeper customization options. Out of the box, just
-              add your content and images, and your new landing page will be
-              ready to go!
-            </p>
+
+          <!-- FAQ 3 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseThree"
+                aria-expanded="false"
+                aria-controls="collapseThree"
+              >
+                Transferências e liquidações (Payout)
+              </button>
+            </h2>
+            <div
+              id="collapseThree"
+              class="accordion-collapse collapse"
+              aria-labelledby="headingThree"
+              data-bs-parent="#faqAccordion"
+            >
+              <div class="accordion-body">
+                Entenda os prazos e valores mínimos para efetuar saques, 
+                bem como as taxas envolvidas em cada operação.
+              </div>
+            </div>
           </div>
+          <!-- Adicione quantos itens de FAQ quiser -->
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <section class="py-5" id="jornada-aprendizado">
       <div class="container">
@@ -300,13 +391,7 @@
           </div>
         </div>
     
-        <!-- Ícone de seta à direita (opcional) -->
-        <div class="arrow-next">
-          <a href="#!">
-            <i class="bi bi-arrow-right"></i>
-          </a>
-        </div>
-      </div>
+  
     </section>
     
 
@@ -315,59 +400,18 @@
       <div class="container position-relative">
         <div class="row justify-content-center">
           <div class="col-xl-6">
-            <h2 class="mb-4">Ready to get started? Sign up now!</h2>
-            <form
-              class="form-subscribe"
-              id="contactFormFooter"
-              data-sb-form-api-token="API_TOKEN"
-            >
-              <div class="row">
-                <div class="col">
-                  <input
-                    class="form-control form-control-lg"
-                    id="emailAddressBelow"
-                    type="email"
-                    placeholder="Email Address"
-                    data-sb-validations="required,email"
-                  />
-                  <div
-                    class="invalid-feedback text-white"
-                    data-sb-feedback="emailAddressBelow:required"
-                  >
-                    Email Address is required.
-                  </div>
-                  <div
-                    class="invalid-feedback text-white"
-                    data-sb-feedback="emailAddressBelow:email"
-                  >
-                    Email Address Email is not valid.
-                  </div>
-                </div>
-                <div class="col-auto">
-                  <button
-                    class="btn btn-primary btn-lg disabled"
-                    id="submitButton"
-                    type="submit"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-              <div class="d-none" id="submitSuccessMessage">
-                <div class="text-center mb-3">
-                  <div class="fw-bolder">Form submission successful!</div>
-                  <p>To activate this form, sign up at</p>
-                  <a class="text-white" href="https://startbootstrap.com/solution/contact-forms"
-                    >https://startbootstrap.com/solution/contact-forms</a
-                  >
-                </div>
-              </div>
-              <div class="d-none" id="submitErrorMessage">
-                <div class="text-center text-danger mb-3">
-                  Error sending message!
-                </div>
-              </div>
-            </form>
+            <h2 class="mb-4">Possui alguma solicitação?</h2>
+            <p class="mb-4">
+              Descreva sua dúvida ou solicitação e nossa equipe retornará o mais breve possível.
+            </p>
+            <a href=""><button class="btn btn-primary">Enviar Solicitação</button></a>
+            <!-- Mensagens de feedback (opcionais) -->
+            <div class="d-none mt-3" id="solicitacaoSucesso">
+              <div class="alert alert-success">Solicitação enviada com sucesso!</div>
+            </div>
+            <div class="d-none mt-3" id="solicitacaoErro">
+              <div class="alert alert-danger">Ocorreu um erro ao enviar. Tente novamente.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -396,7 +440,7 @@
               </li>
             </ul>
             <p class="text-muted small mb-4 mb-lg-0">
-              &copy; Your Website 2023. All Rights Reserved.
+              &copy; Point Network 2025. All Rights Reserved.
             </p>
           </div>
           <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
