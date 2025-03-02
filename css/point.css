@@ -1,6 +1,9 @@
 .themepoint{
     background-color: #33296b;
 }
+.bluepoint{
+   color: #22bbd9;
+}
 
 .btn{
     background-color: #22bbd900;
@@ -30,7 +33,7 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    background-color: #22bbd9; /* Cor principal da rolagem */
+    background-color: #33296b; /* Cor principal da rolagem */
     border-radius: 8px;        /* Arredondamento das pontas */
     border: 2px solid #f0f0f0; /* Espaço ao redor do thumb (opcional) */
   }
@@ -42,7 +45,7 @@
   /* Para Firefox (uso parcial) */
   html {
     /* thumb #22bbd9, track #f0f0f0 */
-    scrollbar-color: #22bbd9 #f0f0f0;
+    scrollbar-color:#33296b #f0f0f0;
     scrollbar-width: thin; /* "auto" ou "thin" */
   }
   
