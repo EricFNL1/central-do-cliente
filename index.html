@@ -88,7 +88,7 @@
       </nav>      
 
     <!-- Masthead (agora com barra de pesquisa) -->
-    <header class="masthead">
+    <header class="masthead" id="barra-pesquisa">
       <div class="container position-relative">
         <div class="row justify-content-center">
           <div class="col-xl-6">
@@ -204,104 +204,108 @@
     </div>
 
     <!-- Terceira linha: área de FAQ -->
-    <div class="row g-0 align-items-stretch bg-light">
-      <!-- Coluna da esquerda: texto e botão -->
-      <div class="col-lg-4 d-flex flex-column justify-content-center p-5">
-        <h3 class="mb-3">Perguntas frequentes</h3>
-        <p class="mb-4">
-          Encontre respostas para as dúvidas mais comuns. Se precisar de mais detalhes, 
-          entre em contato com nosso suporte ou clique no botão para buscar outras soluções.
-        </p>
-        <a href="#!" class="btn btn-outline-primary">
-          Clique Aqui →
-        </a>
-      </div>
-
-      <!-- Coluna da direita: accordion de perguntas -->
-      <div class="col-lg-8 p-5 my-auto bg-white">
-        <!-- Accordion do Bootstrap -->
-        <div class="accordion" id="faqAccordion">
-          <!-- FAQ 1 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseOne"
-                aria-expanded="false"
-                aria-controls="collapseOne"
-              >
-                Como acompanhar meus chamados?
-              </button>
-            </h2>
-            <div
-              id="collapseOne"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingOne"
-              data-bs-parent="#faqAccordion"
-            >
-              <div class="accordion-body">
-                Acesse o painel <strong>“Meus Chamados”</strong> para visualizar o status 
-                de cada solicitação, bem como detalhes de cada atendimento.
+    <div class="container">
+      <div class="row align-items-start g-4">
+        <!-- Coluna da esquerda: texto e botão -->
+        <div class="col-md-4">
+          <h3 class="mb-3">Perguntas frequentes</h3>
+          <p class="mb-4">
+            Encontre as respostas para as suas dúvidas. Se preferir, clique no botão abaixo para
+            pesquisar sua dúvida diretamente.
+          </p>
+          <a href="#barra-pesquisa" class="btn btn-outline-primary">
+            Clique Aqui →
+          </a>
+        </div>
+  
+        <!-- Coluna da direita: accordion de perguntas -->
+        <div class="col-md-8">
+          <div class="p-4 bg-white shadow-sm rounded">
+            <!-- Accordion do Bootstrap -->
+            <div class="accordion" id="faqAccordion">
+              <!-- FAQ 1 -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne"
+                    aria-expanded="false"
+                    aria-controls="collapseOne"
+                  >
+                    Como acompanhar meus chamados?
+                  </button>
+                </h2>
+                <div
+                  id="collapseOne"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="headingOne"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    Acesse o painel <strong>“Meus Chamados”</strong> para visualizar o status
+                    de cada solicitação, bem como detalhes de cada atendimento.
+                  </div>
+                </div>
               </div>
+  
+              <!-- FAQ 2 -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseTwo"
+                    aria-expanded="false"
+                    aria-controls="collapseTwo"
+                  >
+                    Como personalizar o Dashboard?
+                  </button>
+                </h2>
+                <div
+                  id="collapseTwo"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="headingTwo"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    No menu de configurações, selecione quais métricas e widgets deseja exibir,
+                    adaptando o painel às suas necessidades.
+                  </div>
+                </div>
+              </div>
+  
+              <!-- FAQ 3 -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseThree"
+                    aria-expanded="false"
+                    aria-controls="collapseThree"
+                  >
+                    Transferências e liquidações (Payout)
+                  </button>
+                </h2>
+                <div
+                  id="collapseThree"
+                  class="accordion-collapse collapse"
+                  aria-labelledby="headingThree"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    Entenda os prazos e valores mínimos para efetuar saques,
+                    bem como as taxas envolvidas em cada operação.
+                  </div>
+                </div>
+              </div>
+              <!-- Adicione quantos itens de FAQ quiser -->
             </div>
           </div>
-
-          <!-- FAQ 2 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseTwo"
-                aria-expanded="false"
-                aria-controls="collapseTwo"
-              >
-                Como personalizar o Dashboard?
-              </button>
-            </h2>
-            <div
-              id="collapseTwo"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingTwo"
-              data-bs-parent="#faqAccordion"
-            >
-              <div class="accordion-body">
-                No menu de configurações, selecione quais métricas e widgets deseja exibir, 
-                adaptando o painel às suas necessidades.
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ 3 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingThree">
-              <button
-                class="accordion-button collapsed"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseThree"
-                aria-expanded="false"
-                aria-controls="collapseThree"
-              >
-                Transferências e liquidações (Payout)
-              </button>
-            </h2>
-            <div
-              id="collapseThree"
-              class="accordion-collapse collapse"
-              aria-labelledby="headingThree"
-              data-bs-parent="#faqAccordion"
-            >
-              <div class="accordion-body">
-                Entenda os prazos e valores mínimos para efetuar saques, 
-                bem como as taxas envolvidas em cada operação.
-              </div>
-            </div>
-          </div>
-          <!-- Adicione quantos itens de FAQ quiser -->
         </div>
       </div>
     </div>
