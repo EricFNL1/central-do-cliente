@@ -18,6 +18,8 @@ class Solicitacao extends Model
         'categoria',
         'status',
         'anexo',
+        'atendido_por',  // se existir
+        'previsao_entrega',
     ];
 
     // Relacionamento: uma solicitação pertence a um usuário

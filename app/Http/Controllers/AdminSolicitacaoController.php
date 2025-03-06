@@ -62,6 +62,7 @@ class AdminSolicitacaoController extends Controller
         ]);
     }
     
+    
     /**
      * Atualiza a solicitação (despacho ou status).
      */
@@ -75,6 +76,12 @@ class AdminSolicitacaoController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:aberto,em-andamento,fechado',
             'funcionario_id' => 'nullable|exists:users,id', // se quiser atribuir a um user
+        ]);
+
+        $validated = $request->validate([
+            'status' => 'required|in:aberto,em-andamento,fechado',
+            'funcionario_id' => 'nullable|exists:users,id',
+            'previsao_entrega' => 'nullable|date',
         ]);
 
         // Se quiser armazenar a quem foi atribuída

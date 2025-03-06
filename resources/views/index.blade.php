@@ -206,39 +206,61 @@
 <!-- Image Showcases (mantido) -->
 <section class="showcase">
   <!-- As duas primeiras linhas continuam dentro de um container-fluid p-0 -->
-  <div class="container-fluid p-0">
-    <!-- Primeira linha -->
-    <div class="row g-0">
-      <div
-        class="col-lg-6 order-lg-2 text-white showcase-img"
-        style="background-image: url('img/img3.png')"
-      ></div>
-      <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-        <h2>Proporcionando o melhor para o cliente</h2>
-        <p class="lead mb-0">
-          Nosso sistema foi criado para oferecer a melhor experiência, 
-          independentemente do dispositivo. Explore funcionalidades modernas 
-          e um design responsivo que garante total praticidade.
-        </p>
-      </div>
-    </div>
+  <div class="row g-0">
+  <!-- Lado esquerdo: imagem -->
+  <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('{{ asset('img/img3.png') }}');">
+  </div>
+  <!-- Lado direito: últimas solicitações -->
+  <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+    <h2>Suas Últimas Solicitações</h2>
+    @php
+      // Busca as 3 últimas solicitações do usuário autenticado
+      $ultimasSolicitacoes = \App\Models\Solicitacao::where('user_id', Auth::id())
+                            ->latest()
+                            ->take(3)
+                            ->get();
+    @endphp
 
-    <!-- Segunda linha -->
-    <div class="row g-0">
-      <div
-        class="col-lg-6 text-white showcase-img"
-        style="background-image: url('img/img2.png')"
-      ></div>
-      <div class="col-lg-6 my-auto showcase-text">
-        <h2>Melhorando a sua experiência</h2>
-        <p class="lead mb-0">
-          Atualizações constantes e feedback de nossos usuários nos ajudam 
-          a evoluir. Cada recurso é pensado para tornar seu dia a dia mais 
-          produtivo e eficiente.
-        </p>
-      </div>
+    @if($ultimasSolicitacoes->isEmpty())
+      <p class="lead mb-3">Você ainda não possui solicitações.</p>
+    @else
+      <ul class="list-group mb-3">
+        @foreach($ultimasSolicitacoes as $solicitacao)
+          <li class="list-group-item">
+            <strong>#{{ $solicitacao->id }}:</strong>
+            {{ $solicitacao->assunto }}
+            <br>
+            <small class="text-muted">
+              {{ $solicitacao->created_at->format('d/m/Y H:i') }}
+              @if($solicitacao->previsao_entrega)
+                | Previsão: {{ $solicitacao->previsao_entrega->format('d/m/Y') }}
+              @endif
+            </small>
+          </li>
+        @endforeach
+      </ul>
+    @endif
+
+    <a href="{{ route('solicitacoes.index') }}" class="btn">
+      Ver Solicitações →
+    </a>
+  </div>
+</div>
+
+  <!-- Segunda linha (permanece inalterada) -->
+  <div class="row g-0">
+    <div class="col-lg-6 text-white showcase-img" style="background-image: url('{{ asset('img/img2.png') }}');"></div>
+    <div class="col-lg-6 my-auto showcase-text">
+      <h2>Melhorando a sua experiência</h2>
+      <p class="lead mb-0">
+        Atualizações constantes e feedback de nossos usuários nos ajudam 
+        a evoluir. Cada recurso é pensado para tornar seu dia a dia mais 
+        produtivo e eficiente.
+      </p>
     </div>
   </div>
+</div>
+
 
   <!-- Terceira linha: área de FAQ -->
   <!-- Envolvemos em um bloco com fundo claro e padding vertical -->
