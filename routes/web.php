@@ -2,6 +2,15 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdministradoraController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\Administradora;
+use App\Models\User;
+
+
 
 // Rota raiz que exibe a tela de login (para usuários não autenticados)
 Route::get('/', function () {
@@ -32,7 +41,96 @@ Route::get('/nova', function () {
 
 
 
-// Rotas protegidas pelo middleware "auth"
+// Agrupa todas as rotas em /admin, exige que o usuário esteja logado.
+Route::prefix('admin')->middleware('auth')->group(function () {
+    
+    // Página principal do Admin
+    Route::get('/', function () {
+        if (Auth::user()->categoria !== 'admin') {
+            abort(403, 'Acesso não autorizado');
+        }
+        return view('admin.panel');
+    })->name('admin.panel');
+
+    // Página para criar Administradora (formulário)
+    Route::get('/administradoras/create', function () {
+        if (Auth::user()->categoria !== 'admin') {
+            abort(403, 'Acesso não autorizado');
+        }
+        return view('admin.administradoras.create');
+    })->name('admin.administradoras.create');
+
+    // Recebe os dados do formulário de Administradora e salva
+    Route::post('/administradoras', function (Request $request) {
+        if (Auth::user()->categoria !== 'admin') {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        // Validação simples
+        $request->validate([
+            'nome' => 'required|string|max:255',
+        ]);
+
+        // Cria no banco
+        Administradora::create([
+            'nome' => $request->nome
+        ]);
+
+        // Redireciona de volta ao painel
+        return redirect()->route('admin.panel')
+            ->with('status', 'Administradora cadastrada com sucesso!');
+    })->name('admin.administradoras.store');
+
+    // Página para criar Usuário (formulário)
+    Route::get('/usuarios/create', function () {
+        if (Auth::user()->categoria !== 'admin') {
+            abort(403, 'Acesso não autorizado');
+        }
+        return view('admin.usuarios.create');
+    })->name('admin.usuarios.create');
+
+    // Recebe os dados do formulário de Usuário e salva
+    Route::post('/usuarios', function (Request $request) {
+        if (Auth::user()->categoria !== 'admin') {
+            abort(403, 'Acesso não autorizado');
+        }
+
+        // Validação simples
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed'
+        ]);
+
+        // Cria o usuário no banco
+        User::create([
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'password'          => bcrypt($request->password),
+            'categoria'         => 'user',  // Ou outro valor padrão
+            'administradora_id' => $request->administradora_id, 
+        ]);
+
+        return redirect()->route('admin.panel')
+            ->with('status', 'Usuário cadastrado com sucesso!');
+    })->name('admin.usuarios.store');
+
+    // As rotas que usam o UserController
+    // (lista, edição, exclusão)
+    Route::get('/usuarios', [UserController::class, 'index'])
+        ->name('admin.usuarios.index');
+
+    Route::get('/usuarios/{user}/edit', [UserController::class, 'edit'])
+        ->name('admin.usuarios.edit');
+
+    Route::patch('/usuarios/{user}', [UserController::class, 'update'])
+        ->name('admin.usuarios.update');
+
+    Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])
+        ->name('admin.usuarios.destroy');
+});
+
+// Rotas que exigem login
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
