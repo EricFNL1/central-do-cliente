@@ -25,4 +25,10 @@ class Solicitacao extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function funcionario()
+{
+    return $this->belongsTo(User::class, 'atendido_por');
+}
+
 }

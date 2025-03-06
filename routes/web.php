@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\Administradora;
 use App\Models\User;
 use App\Http\Controllers\SolicitacaoController;
+use App\Http\Controllers\AdminSolicitacaoController;
 
 
 
@@ -133,6 +134,21 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])
         ->name('admin.usuarios.destroy');
+        
+    Route::get('/solicitacoes', [AdminSolicitacaoController::class, 'index'])
+        ->name('admin.solicitacoes.index');
+
+    // Visualizar detalhes de uma solicitação
+    Route::get('/solicitacoes/{solicitacao}', [AdminSolicitacaoController::class, 'show'])
+        ->name('admin.solicitacoes.show');
+
+    // Formulário para despachar solicitação (atribuir funcionário)
+    Route::get('/solicitacoes/{solicitacao}/despacho', [AdminSolicitacaoController::class, 'editDespacho'])
+        ->name('admin.solicitacoes.editDespacho');
+
+    // Enviar despacho / atualizar status
+    Route::patch('/solicitacoes/{solicitacao}', [AdminSolicitacaoController::class, 'update'])
+        ->name('admin.solicitacoes.update');
 });
 
 // Rotas que exigem login
