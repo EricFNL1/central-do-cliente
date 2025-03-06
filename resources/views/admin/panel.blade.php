@@ -1,4 +1,3 @@
-<!-- resources/views/admin/panel.blade.php -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -21,8 +20,9 @@
             <li><a href="{{ route('admin.administradoras.create') }}">Adicionar Administradora</a></li>
             <li><a href="{{ route('admin.usuarios.create') }}">Cadastrar Usuário</a></li>
             <li><a href="{{ route('admin.logs.index') }}">Logs de Usuários</a></li>
-            <!-- Nova guia para gerenciar solicitações -->
             <li><a href="{{ route('admin.solicitacoes.index') }}">Gerenciar Solicitações</a></li>
+            <!-- Nova guia para gerenciar FAQs -->
+            <li><a href="{{ route('admin.faqs.index') }}">Gerenciar FAQs</a></li>
             <li><a href="{{ route('index') }}">Voltar</a></li>
         </ul>
 

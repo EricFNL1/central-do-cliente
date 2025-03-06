@@ -119,39 +119,44 @@
 
     <!-- Masthead (agora com barra de pesquisa) -->
     <header class="masthead" id="barra-pesquisa">
-      <div class="container position-relative">
-        <div class="row justify-content-center">
-          <div class="col-xl-6">
-            <div class="text-center text-white">
-              <!-- Título da página -->
-              <h1 class="mb-5">Encontre o que você precisa!</h1>
-              <!-- Formulário de pesquisa -->
-              <form class="form-subscribe" id="searchForm">
-                <div class="row">
-                  <div class="col">
-                    <input
-                      class="form-control form-control-lg"
-                      id="searchInput"
-                      type="text"
-                      placeholder="Digite sua pesquisa..."
-                    />
-                  </div>
-                  <div class="col-auto">
-                    <button
-                      class="btn btn-primary btn-lg"
-                      id="searchButton"
-                      type="submit"
-                    >
-                      Pesquisar
-                    </button>
-                  </div>
-                </div>
-              </form>
+  <div class="container position-relative">
+    <div class="row justify-content-center">
+      <div class="col-xl-6">
+        <div class="text-center text-white">
+          <!-- Título da página -->
+          <h1 class="mb-5">Encontre o que você precisa!</h1>
+          <!-- Formulário de pesquisa -->
+          {{-- Ajuste a action para a rota de busca e o método para GET --}}
+          <form class="form-subscribe" id="searchForm" action="{{ route('faqs.search') }}" method="GET">
+            <div class="row">
+              <div class="col">
+                <input
+                  class="form-control form-control-lg"
+                  id="searchInput"
+                  type="text"
+                  name="query"
+                  placeholder="Digite sua pesquisa..."
+                />
+              </div>
+              <div class="col-auto">
+                <button
+                  class="btn btn-primary btn-lg"
+                  id="searchButton"
+                  type="submit"
+                >
+                  Pesquisar
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
+          @if(session('status'))
+            <p style="color: yellow;">{{ session('status') }}</p>
+          @endif
         </div>
       </div>
-    </header>
+    </div>
+  </div>
+</header>
 
     <!-- Icons Grid (mantido) -->
     <section class="features-icons bg-light text-center">
@@ -237,113 +242,73 @@
 
   <!-- Terceira linha: área de FAQ -->
   <!-- Envolvemos em um bloco com fundo claro e padding vertical -->
-  <div class="py-5" style="background-color: #f8f9fa;"  id="faq">
-    <div class="container">
-      <div class="row align-items-start g-4">
-        <!-- Coluna da esquerda: texto e botão -->
-        <div class="col-md-4">
-          <h3 class="mb-3">Perguntas frequentes</h3>
-          <p class="mb-4">
-            Encontre as respostas para as suas dúvidas. Se preferir, clique no botão abaixo para
-            pesquisar sua dúvida diretamente.
-          </p>
-          <a href="#barra-pesquisa" class="btn btn-outline-primary">
-            Clique Aqui →
-          </a>
-        </div>
+  <div class="py-5" style="background-color: #f8f9fa;" id="faq">
+  <div class="container">
+    <div class="row align-items-start g-4">
+      <!-- Coluna da esquerda -->
+      <div class="col-md-4">
+        <h3 class="mb-3">Perguntas frequentes</h3>
+        <p class="mb-4">
+          Encontre as respostas para as suas dúvidas. Se preferir, clique no botão abaixo para
+          pesquisar sua dúvida diretamente.
+        </p>
+        <a href="#barra-pesquisa" class="btn btn-outline-primary">
+          Clique Aqui →
+        </a>
+      </div>
 
-        <!-- Coluna da direita: accordion de perguntas -->
-        <div class="col-md-8">
-          <div class="p-4 bg-white shadow-sm rounded">
-            <!-- Accordion do Bootstrap -->
-            <div class="accordion" id="faqAccordion">
-              <!-- FAQ 1 -->
+      <!-- Coluna da direita: accordion de perguntas -->
+      <div class="col-md-8">
+        <div class="p-4 bg-white shadow-sm rounded">
+          <div class="accordion" id="faqAccordion">
+            @php
+              // Carrega apenas 3 FAQs do banco
+              $faqs = \App\Models\Faq::take(3)->get();
+            @endphp
+
+            @forelse($faqs as $index => $faq)
               <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
+                <h2 class="accordion-header" id="heading{{ $index }}">
                   <button
                     class="accordion-button collapsed"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#collapseOne"
+                    data-bs-target="#collapse{{ $index }}"
                     aria-expanded="false"
-                    aria-controls="collapseOne"
+                    aria-controls="collapse{{ $index }}"
                   >
-                    Como acompanhar meus chamados?
+                    {{ $faq->pergunta }}
                   </button>
                 </h2>
                 <div
-                  id="collapseOne"
+                  id="collapse{{ $index }}"
                   class="accordion-collapse collapse"
-                  aria-labelledby="headingOne"
+                  aria-labelledby="heading{{ $index }}"
                   data-bs-parent="#faqAccordion"
                 >
                   <div class="accordion-body">
-                    Acesse o painel <strong>“Meus Chamados”</strong> para visualizar o status
-                    de cada solicitação, bem como detalhes de cada atendimento.
+                    {!! nl2br(e($faq->resposta)) !!}
                   </div>
                 </div>
               </div>
+            @empty
+              <p>Nenhuma FAQ cadastrada no momento.</p>
+            @endforelse
 
-              <!-- FAQ 2 -->
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingTwo">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo"
-                    aria-expanded="false"
-                    aria-controls="collapseTwo"
-                  >
-                    Como personalizar o Dashboard?
-                  </button>
-                </h2>
-                <div
-                  id="collapseTwo"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingTwo"
-                  data-bs-parent="#faqAccordion"
-                >
-                  <div class="accordion-body">
-                    No menu de configurações, selecione quais métricas e widgets deseja exibir,
-                    adaptando o painel às suas necessidades.
-                  </div>
-                </div>
-              </div>
-
-              <!-- FAQ 3 -->
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingThree">
-                  <button
-                    class="accordion-button collapsed"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree"
-                    aria-expanded="false"
-                    aria-controls="collapseThree"
-                  >
-                    Transferências e liquidações (Payout)
-                  </button>
-                </h2>
-                <div
-                  id="collapseThree"
-                  class="accordion-collapse collapse"
-                  aria-labelledby="headingThree"
-                  data-bs-parent="#faqAccordion"
-                >
-                  <div class="accordion-body">
-                    Entenda os prazos e valores mínimos para efetuar saques,
-                    bem como as taxas envolvidas em cada operação.
-                  </div>
-                </div>
-              </div>
-              <!-- Adicione quantos itens de FAQ quiser -->
-            </div>
           </div>
+          <!-- Mensagem para indicar que há mais perguntas -->
+          @if (\App\Models\Faq::count() > 3)
+            <div class="mt-3">
+              <small>Existem mais perguntas frequentes. Utilize a barra de pesquisa para encontrá-las!</small>
+            </div>
+          @endif
         </div>
       </div>
     </div>
   </div>
+</div>
+
+
 </section>
 
 

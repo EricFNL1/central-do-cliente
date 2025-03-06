@@ -12,7 +12,8 @@ use App\Models\Administradora;
 use App\Models\User;
 use App\Http\Controllers\SolicitacaoController;
 use App\Http\Controllers\AdminSolicitacaoController;
-
+use App\Http\Controllers\AdminFaqController;
+use App\Http\Controllers\FaqController;
 
 
 // Rota raiz que exibe a tela de login (para usuários não autenticados)
@@ -149,6 +150,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // Enviar despacho / atualizar status
     Route::patch('/solicitacoes/{solicitacao}', [AdminSolicitacaoController::class, 'update'])
         ->name('admin.solicitacoes.update');
+
+    Route::get('/faqs', [AdminFaqController::class, 'index'])->name('admin.faqs.index');
+    Route::get('/faqs/create', [AdminFaqController::class, 'create'])->name('admin.faqs.create');
+    Route::post('/faqs', [AdminFaqController::class, 'store'])->name('admin.faqs.store');
+    Route::get('/faqs/{faq}/edit', [AdminFaqController::class, 'edit'])->name('admin.faqs.edit');
+    Route::patch('/faqs/{faq}', [AdminFaqController::class, 'update'])->name('admin.faqs.update');
+    Route::delete('/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('admin.faqs.destroy');
 });
 
 // Rotas que exigem login
@@ -178,6 +186,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/solicitacoes/{solicitacao}', [SolicitacaoController::class, 'show'])
         ->name('solicitacoes.show');
 });
+
+Route::get('/faqs/search', [FaqController::class, 'search'])->name('faqs.search');
 
 
 // Importa as rotas de autenticação (geralmente definidas no arquivo auth.php)
