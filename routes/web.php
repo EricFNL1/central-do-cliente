@@ -4,11 +4,13 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdministradoraController;
+use App\Http\Controllers\AdminLogController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Administradora;
 use App\Models\User;
+use App\Http\Controllers\SolicitacaoController;
 
 
 
@@ -125,6 +127,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     Route::patch('/usuarios/{user}', [UserController::class, 'update'])
         ->name('admin.usuarios.update');
+    
+    Route::get('/logs', [AdminLogController::class, 'index'])
+        ->name('admin.logs.index');
 
     Route::delete('/usuarios/{user}', [UserController::class, 'destroy'])
         ->name('admin.usuarios.destroy');
@@ -136,6 +141,28 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+// Agrupe as rotas para solicitacoes e exija login
+Route::middleware('auth')->group(function () {
+    // Listar solicitações do usuário
+    Route::get('/solicitacoes', [SolicitacaoController::class, 'index'])
+        ->name('solicitacoes.index');
+
+    // Formulário de nova solicitação
+    Route::get('/solicitacoes/create', [SolicitacaoController::class, 'create'])
+        ->name('solicitacoes.create');
+
+    // Salvar nova solicitação
+    Route::post('/solicitacoes', [SolicitacaoController::class, 'store'])
+        ->name('solicitacoes.store');
+
+    // Exibir detalhes de uma solicitação
+    Route::get('/solicitacoes/{solicitacao}', [SolicitacaoController::class, 'show'])
+        ->name('solicitacoes.show');
+});
+
 
 // Importa as rotas de autenticação (geralmente definidas no arquivo auth.php)
 require __DIR__.'/auth.php';

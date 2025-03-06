@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Minhas Solicitações - Central do Cliente</title>
+    <title>Nova Solicitação - Central do Cliente</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/point.css">
     <!-- Bootstrap icons-->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
@@ -20,20 +23,11 @@
       rel="stylesheet"
       type="text/css"
     />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/point.css" />
 
-    <!-- CSS para garantir altura total do body e html -->
-    <style>
-      html, body {
-        height: 100%;
-      }
-    </style>
   </head>
-  <!-- Define o body como um container flex, ocupando toda a altura -->
-  <body class="d-flex flex-column h-100">
 
+  <!-- Define o body como container flex vertical para o sticky footer -->
+  <body class="d-flex flex-column h-100">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg themepoint static-top">
       <div class="container-fluid">
@@ -57,13 +51,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="{{route('index')}}">
-                 Home
-                </a>
+              <a class="nav-link" href="{{route('index')}}">
+                Home
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link isticked" href="{{route('solicitacao')}}">
-                Minhas solicitações
+              <a class="nav-link" href="{{route('solicitacao')}}">
+                Minhas Solicitações
               </a>
             </li>
             <li class="nav-item">
@@ -123,102 +117,83 @@
       </div>
     </nav>
 
-    <!-- Conteúdo Principal dentro de <main>, que se expande (flex-fill) -->
+    <!-- Conteúdo Principal -->
     <main class="flex-fill">
-      <div class="container mt-5">
-        <h1 class="mb-4">Minhas Solicitações</h1>
-        <p>Acompanhe o status e histórico das suas solicitações abaixo.</p>
-        
-        <!-- Filtros e Pesquisa -->
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <input type="text" class="form-control" placeholder="Pesquisar solicitação..." />
-          </div>
-          <div class="col-md-3">
-            <select class="form-select">
-              <option value="">Filtrar por status</option>
-              <option value="aberto">Aberto</option>
-              <option value="em-andamento">Em Andamento</option>
-              <option value="fechado">Fechado</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <button class="btn w-100">Filtrar</button>
-          </div>
-        </div>
-
-        <!-- Botão Nova Solicitação -->
-        <div class="mb-4 text-end">
-          <!-- Ajuste o href para a página ou ação desejada -->
-          <a href="{{route('nova')}}" class="btn">
-            <i class="bi bi-plus-circle me-1"></i> Nova Solicitação
-          </a>
-        </div>
-
-        <!-- Lista de Solicitações -->
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Assunto</th>
-                <th>Data de Abertura</th>
-                <th>Status</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Exemplo de solicitação 1 -->
-              <tr>
-                <td>#12345</td>
-                <td>Dúvida sobre pagamento</td>
-                <td>05/03/2025</td>
-                <td><span class="badge bg-warning text-dark">Em Andamento</span></td>
-                <td><a href="#!" class="btn btn-sm btn-info">Ver Detalhes</a></td>
-              </tr>
-              <!-- Exemplo de solicitação 2 -->
-              <tr>
-                <td>#12344</td>
-                <td>Problema no sistema</td>
-                <td>03/03/2025</td>
-                <td><span class="badge bg-success">Fechado</span></td>
-                <td><a href="#!" class="btn btn-sm btn-info">Ver Detalhes</a></td>
-              </tr>
-              <!-- Exemplo de solicitação 3 -->
-              <tr>
-                <td>#12343</td>
-                <td>Solicitação de novo recurso</td>
-                <td>01/03/2025</td>
-                <td><span class="badge bg-danger">Aberto</span></td>
-                <td><a href="#!" class="btn btn-sm btn-info">Ver Detalhes</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Paginação -->
-        <nav aria-label="Page navigation example" class="mt-4">
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-            </li>
-            <li class="page-item active">
-              <a class="page-link" href="#">
-                1 <span class="visually-hidden">(Página atual)</span>
-              </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Próximo</a>
-            </li>
+    <div class="container mt-5 mb-5">
+      <h1 class="mb-4">Nova Solicitação</h1>
+      
+      <!-- Mensagens de erro -->
+      @if ($errors->any())
+        <div class="alert alert-danger">
+          <ul>
+            @foreach ($errors->all() as $erro)
+              <li>{{ $erro }}</li>
+            @endforeach
           </ul>
-        </nav>
+        </div>
+      @endif
 
-      </div>
-    </main>
+      <!-- Mensagem de sucesso -->
+      @if (session('status'))
+        <div class="alert alert-success">
+          {{ session('status') }}
+        </div>
+      @endif
 
-    <!-- Footer com mt-auto para “colar” no fim da página -->
+      <form action="{{ route('solicitacoes.store') }}"
+            method="POST"
+            enctype="multipart/form-data">
+        @csrf
+        
+        <div class="mb-3">
+          <label for="assunto" class="form-label">Assunto</label>
+          <input
+            type="text"
+            class="form-control"
+            id="assunto"
+            name="assunto"
+            value="{{ old('assunto') }}"
+            placeholder="Digite o assunto da solicitação"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição</label>
+          <textarea
+            class="form-control"
+            id="descricao"
+            name="descricao"
+            rows="5"
+            placeholder="Descreva sua solicitação detalhadamente"
+            required
+          >{{ old('descricao') }}</textarea>
+        </div>
+        <div class="mb-3">
+          <label for="categoria" class="form-label">Categoria</label>
+          <select class="form-select" id="categoria" name="categoria" required>
+            <option value="" disabled {{ old('categoria') ? '' : 'selected' }}>Selecione uma categoria</option>
+            <option value="financeiro" {{ old('categoria')==='financeiro' ? 'selected' : '' }}>Financeiro</option>
+            <option value="tecnico" {{ old('categoria')==='tecnico' ? 'selected' : '' }}>Técnico</option>
+            <option value="geral" {{ old('categoria')==='geral' ? 'selected' : '' }}>Geral</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="anexo" class="form-label">Anexo (opcional)</label>
+          <input class="form-control" type="file" id="anexo" name="anexo" />
+        </div>
+        <div class="d-flex justify-content-between">
+          <a href="{{ route('solicitacoes.index') }}" class="btn">
+            <i class="bi bi-arrow-left-circle me-1"></i> Voltar
+          </a>
+          <button type="submit" class="btn">
+            <i class="bi bi-check-circle me-1"></i> Enviar Solicitação
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+    <!-- Footer -->
     <footer class="footer bg-light mt-auto">
       <div class="container">
         <div class="row">
@@ -253,9 +228,10 @@
       </div>
     </footer>
 
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
+  <!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS -->
+<script src="js/scripts.js"></script>
+
   </body>
 </html>

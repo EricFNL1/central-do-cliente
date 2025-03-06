@@ -15,6 +15,10 @@ class AccessLog extends Model
         'ip_address',
         'user_agent',
     ];
+    public function user()
+{
+    return $this->belongsTo(\App\Models\User::class);
+}
 
     // Se preferir, você pode desabilitar os timestamps automáticos
     // public $timestamps = false;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Nova Solicitação - Central do Cliente</title>
+    <title>Minhas Solicitações - Central do Cliente</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -23,14 +23,17 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/point.css" />
+
+    <!-- CSS para garantir altura total do body e html -->
     <style>
       html, body {
         height: 100%;
       }
     </style>
   </head>
-  <!-- Define o body como container flex vertical para o sticky footer -->
+  <!-- Define o body como um container flex, ocupando toda a altura -->
   <body class="d-flex flex-column h-100">
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg themepoint static-top">
       <div class="container-fluid">
@@ -54,13 +57,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="{{route('index')}}">
-                Home
-              </a>
+                <a class="nav-link" href="{{route('index')}}">
+                 Home
+                </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{route('solicitacao')}}">
-                Minhas Solicitações
+              <a class="nav-link isticked" href="{{route('solicitacoes.index')}}">
+                Minhas solicitações
               </a>
             </li>
             <li class="nav-item">
@@ -120,58 +123,110 @@
       </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
+    <!-- Conteúdo Principal dentro de <main>, que se expande (flex-fill) -->
     <main class="flex-fill">
-      <div class="container mt-5 mb-5">
-        <h1 class="mb-4">Nova Solicitação</h1>
-        <p>Preencha os dados abaixo para enviar sua solicitação.</p>
-        <form>
-          <div class="mb-3">
-            <label for="assunto" class="form-label">Assunto</label>
-            <input
-              type="text"
-              class="form-control"
-              id="assunto"
-              placeholder="Digite o assunto da solicitação"
-              required
-            />
+      <div class="container mt-5">
+        <h1 class="mb-4">Minhas Solicitações</h1>
+        <p>Acompanhe o status e histórico das suas solicitações abaixo.</p>
+        
+        <!-- Filtros e Pesquisa -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Pesquisar solicitação..." />
           </div>
-          <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição</label>
-            <textarea
-              class="form-control"
-              id="descricao"
-              rows="5"
-              placeholder="Descreva sua solicitação detalhadamente"
-              required
-            ></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="categoria" class="form-label">Categoria</label>
-            <select class="form-select" id="categoria" required>
-              <option value="" selected disabled>Selecione uma categoria</option>
-              <option value="financeiro">Financeiro</option>
-              <option value="tecnico">Técnico</option>
-              <option value="geral">Geral</option>
+          <div class="col-md-3">
+            <select class="form-select">
+              <option value="">Filtrar por status</option>
+              <option value="aberto">Aberto</option>
+              <option value="em-andamento">Em Andamento</option>
+              <option value="fechado">Fechado</option>
             </select>
           </div>
-          <div class="mb-3">
-            <label for="anexo" class="form-label">Anexo (opcional)</label>
-            <input class="form-control" type="file" id="anexo" />
+          <div class="col-md-3">
+            <button class="btn w-100">Filtrar</button>
           </div>
-          <div class="d-flex justify-content-between">
-            <a href="{{route('solicitacao')}}" class="btn">
-              <i class="bi bi-arrow-left-circle me-1"></i> Voltar
-            </a>
-            <button type="submit" class="btn">
-              <i class="bi bi-check-circle me-1"></i> Enviar Solicitação
-            </button>
-          </div>
-        </form>
+        </div>
+
+        <!-- Botão Nova Solicitação -->
+        <div class="mb-4 text-end">
+          <!-- Ajuste o href para a página ou ação desejada -->
+          <a href="{{route('solicitacoes.create')}}" class="btn">
+            <i class="bi bi-plus-circle me-1"></i> Nova Solicitação
+          </a>
+        </div>
+
+        <!-- Lista de Solicitações -->
+        <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Assunto</th>
+              <th>Data de Abertura</th>
+              <th>Status</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse($solicitacoes as $solicitacao)
+              <tr>
+                <td>#{{ $solicitacao->id }}</td>
+                <td>{{ $solicitacao->assunto }}</td>
+                <td>{{ $solicitacao->created_at->format('d/m/Y H:i') }}</td>
+                
+                @php
+                  // Exemplo simples de “badge” dependendo do status
+                  $badgeClass = match($solicitacao->status) {
+                    'aberto' => 'bg-danger',
+                    'em-andamento' => 'bg-warning text-dark',
+                    'fechado' => 'bg-success',
+                    default => 'bg-secondary',
+                  };
+                @endphp
+                
+                <td>
+                  <span class="badge {{ $badgeClass }}">
+                    {{ ucfirst($solicitacao->status) }}
+                  </span>
+                </td>
+                <td>
+                  <a href="{{ route('solicitacoes.show', $solicitacao->id) }}" class="btn btn-sm btn-info">
+                    Ver Detalhes
+                  </a>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="5">Nenhuma solicitação encontrada.</td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+
+        <!-- Paginação -->
+        <nav aria-label="Page navigation example" class="mt-4">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link" href="#">
+                1 <span class="visually-hidden">(Página atual)</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Próximo</a>
+            </li>
+          </ul>
+        </nav>
+
       </div>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer com mt-auto para “colar” no fim da página -->
     <footer class="footer bg-light mt-auto">
       <div class="container">
         <div class="row">

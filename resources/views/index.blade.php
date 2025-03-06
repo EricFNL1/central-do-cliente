@@ -55,7 +55,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('solicitacao') }}">
+          <a class="nav-link" href="{{ route('solicitacoes.index') }}">
             Minhas solicitações
           </a>
         </li>
@@ -162,11 +162,11 @@
               class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3"
             >
               <div class="features-icons-icon d-flex">
-                <i class="bi-cash m-auto bluepoint"></i>
+                <i class="bi-calendar m-auto bluepoint"></i>
               </div>
-              <h3>Pague seus boletos</h3>
+              <h3>Faça suas solicitações</h3>
               <p class="lead mb-0">
-                Acesse e pague todos os seus boletos do sistema de forma prática e eficiente!
+                Acesse e solicite alterações ou execução de processos, acompanhe suas solicitações e status!
               </p>
             </div>
           </div>
