@@ -460,7 +460,7 @@
             <p class="mb-4">
               Descreva sua dúvida ou solicitação e nossa equipe retornará o mais breve possível.
             </p>
-            <a href="{{route('nova')}}"><button class="btn btn-primary">Enviar Solicitação</button></a>
+            <a href="{{route('solicitacoes.create')}}"><button class="btn btn-primary">Enviar Solicitação</button></a>
             <!-- Mensagens de feedback (opcionais) -->
             <div class="d-none mt-3" id="solicitacaoSucesso">
               <div class="alert alert-success">Solicitação enviada com sucesso!</div>

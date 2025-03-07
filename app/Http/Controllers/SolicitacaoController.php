@@ -12,16 +12,30 @@ class SolicitacaoController extends Controller
     /**
      * Lista todas as solicitações do usuário logado.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Se quiser filtrar por admin, faça uma verificação se (Auth::user()->categoria === 'admin')...
-        // Mas aqui, listaremos somente as solicitações do próprio usuário.
-        $solicitacoes = Solicitacao::where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('solicitacoes.index', compact('solicitacoes'));
+        $search = $request->query('search');
+        $status = $request->query('status');
+    
+        $query = \App\Models\Solicitacao::where('user_id', Auth::id());
+    
+        if ($search) {
+            $query->where('assunto', 'LIKE', "%{$search}%");
+        }
+    
+        if ($status) {
+            $query->where('status', $status);
+        }
+    
+        // Pagina 10 itens por página
+        $solicitacoes = $query->orderBy('created_at', 'desc')->paginate(10);
+    
+        // Mantém os parâmetros de busca na paginação
+        $solicitacoes->appends($request->all());
+    
+        return view('solicitacoes.index', compact('solicitacoes', 'search', 'status'));
     }
+    
 
     /**
      * Exibe o formulário de criação de nova solicitação.

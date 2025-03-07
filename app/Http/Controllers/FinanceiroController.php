@@ -9,15 +9,9 @@ use Carbon\Carbon;
 
 class FinanceiroController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Obtém a administradora do usuário logado
         $administradoraId = Auth::user()->administradora_id;
-
-        // Lista todas as faturas dessa administradora, ordenadas por data_vencimento
-        $faturas = Fatura::where('administradora_id', $administradoraId)
-                         ->orderBy('data_vencimento', 'asc')
-                         ->get();
 
         // Valor em Aberto: soma das faturas pendentes
         $valorEmAberto = Fatura::where('administradora_id', $administradoraId)
@@ -29,18 +23,27 @@ class FinanceiroController extends Controller
                                   ->where('status', 'pendente')
                                   ->count();
 
-        // Últimas Transações: últimas 3 faturas atualizadas (ou pagas)
+        // Últimas Transações (ex.: últimas 3 faturas atualizadas/pagas)
         $ultimasTransacoes = Fatura::where('administradora_id', $administradoraId)
                                    ->orderBy('updated_at', 'desc')
                                    ->take(3)
                                    ->get();
 
-        // Histórico: todas as faturas, ordenadas por data_vencimento (desc)
+        // Histórico: todas as faturas da administradora, paginadas
+        // Se quiser apenas as faturas pagas, ajuste a query
+        // Exemplo: ->where('status', 'pago')
         $historico = Fatura::where('administradora_id', $administradoraId)
                            ->orderBy('data_vencimento', 'desc')
-                           ->get();
+                           // usa paginação de 5 itens para o histórico
+                           ->paginate(5, ['*'], 'historicoPage');
 
-        // Exemplo de gerar dados do gráfico dinamicamente (faturas pagas por mês no ano atual)
+        // Faturas (por exemplo, listando todas, ou somente “todas” sem filtrar status)
+        $faturas = Fatura::where('administradora_id', $administradoraId)
+                         ->orderBy('data_vencimento', 'asc')
+                         // usa paginação de 5 itens para a lista de faturas
+                         ->paginate(5, ['*'], 'faturasPage');
+
+        // Dados do gráfico (faturas pagas por mês)
         $chartData = $this->gerarDadosGrafico($administradoraId);
 
         return view('financeiro.index', [
@@ -59,7 +62,6 @@ class FinanceiroController extends Controller
      */
     private function gerarDadosGrafico($admId)
     {
-        // Mapeamento de número do mês para nome
         $mesNomes = [
             1=>'Jan', 2=>'Fev', 3=>'Mar', 4=>'Abr',
             5=>'Mai', 6=>'Jun', 7=>'Jul', 8=>'Ago',
@@ -69,7 +71,7 @@ class FinanceiroController extends Controller
         // Inicializa array de 12 meses com zero
         $meses = array_fill_keys(array_values($mesNomes), 0);
 
-        // Pega faturas pagas este ano
+        // Faturas pagas este ano
         $faturasPagas = Fatura::where('administradora_id', $admId)
                               ->where('status','pago')
                               ->whereYear('data_pagamento', date('Y'))
@@ -77,20 +79,16 @@ class FinanceiroController extends Controller
 
         foreach ($faturasPagas as $f) {
             if (!$f->data_pagamento) {
-                continue; // Se não tiver data_pagamento, pula
+                continue;
             }
 
-            // Número do mês (1..12)
-            $numMes = $f->data_pagamento->format('n');
-            // Nome do mês (ex.: "Jan")
+            $numMes = $f->data_pagamento->format('n'); // 1..12
             $mesNome = $mesNomes[$numMes];
-            // Soma o valor no array
             $meses[$mesNome] += $f->valor;
         }
 
-        // Monta arrays para labels e data
-        $labels = array_keys($meses);   // ['Jan','Fev','Mar',...]
-        $data   = array_values($meses); // [150, 200, 0, ...]
+        $labels = array_keys($meses);
+        $data   = array_values($meses);
 
         return [
             'labels' => $labels,
@@ -101,11 +99,10 @@ class FinanceiroController extends Controller
     public function pagarFatura(Request $request)
     {
         $request->validate([
-            'fatura_id' => 'required', // ajuste conforme sua lógica
+            'fatura_id' => 'required',
             'valor'     => 'required|numeric|min:0.01',
         ]);
 
-        // Localiza a fatura
         $fatura = Fatura::findOrFail($request->fatura_id);
 
         // Verifica se a fatura está pendente

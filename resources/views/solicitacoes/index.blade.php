@@ -19,14 +19,14 @@
   </style>
 </head>
 <body class="d-flex flex-column h-100">
-
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg themepoint static-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="{{ route('index') }}">
         <img src="{{ asset('img/Pointcentral.png') }}" alt="Logo" width="120" />
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -35,7 +35,7 @@
               <a class="nav-link" href="{{ route('index') }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link isticked" href="{{ route('solicitacoes.index') }}">Minhas solicitações</a>
+            <a class="nav-link isticked" href="{{ route('solicitacoes.index') }}">Minhas Solicitações</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ route('financeiro') }}">Financeiro</a>
@@ -50,7 +50,8 @@
         <div class="d-flex align-items-center">
           @auth
             <div class="dropdown me-2">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+                 aria-expanded="false">
                 <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="userDropdown">
@@ -85,23 +86,23 @@
       <h1 class="mb-4">Minhas Solicitações</h1>
       <p>Acompanhe o status e histórico das suas solicitações abaixo.</p>
       
-      <!-- Filtros e Pesquisa -->
-      <div class="row mb-4">
+      <!-- Formulário de Filtro -->
+      <form action="{{ route('solicitacoes.index') }}" method="GET" class="row g-3 mb-4">
         <div class="col-md-6">
-          <input type="text" class="form-control" placeholder="Pesquisar solicitação..." />
+          <input type="text" name="search" value="{{ request('search') }}" class="form-control" placeholder="Pesquisar solicitação...">
         </div>
         <div class="col-md-3">
-          <select class="form-select">
+          <select name="status" class="form-select">
             <option value="">Filtrar por status</option>
-            <option value="aberto">Aberto</option>
-            <option value="em-andamento">Em Andamento</option>
-            <option value="fechado">Fechado</option>
+            <option value="aberto" {{ request('status') === 'aberto' ? 'selected' : '' }}>Aberto</option>
+            <option value="em-andamento" {{ request('status') === 'em-andamento' ? 'selected' : '' }}>Em Andamento</option>
+            <option value="finalizado" {{ request('status') === 'finalizado' ? 'selected' : '' }}>Finalizado</option>
           </select>
         </div>
         <div class="col-md-3">
-          <button class="btn w-100">Filtrar</button>
+          <button type="submit" class="btn w-100">Filtrar</button>
         </div>
-      </div>
+      </form>
 
       <!-- Botão Nova Solicitação -->
       <div class="mb-4 text-end">
@@ -164,24 +165,13 @@
         </table>
       </div>
 
-      <!-- Paginação (se necessário) -->
-      <nav aria-label="Page navigation example" class="mt-4">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-          </li>
-          <li class="page-item active">
-            <a class="page-link" href="#">
-              1 <span class="visually-hidden">(Página atual)</span>
-            </a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Próximo</a>
-          </li>
-        </ul>
-      </nav>
+     <!-- Paginação -->
+<nav aria-label="Page navigation example" class="mt-4">
+  <div class="d-flex justify-content-center">
+    {{ $solicitacoes->links() }}
+  </div>
+</nav>
+
 
     </div>
   </main>
@@ -200,9 +190,7 @@
             <li class="list-inline-item">⋅</li>
             <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
           </ul>
-          <p class="text-muted small mb-4 mb-lg-0">
-            &copy; Point Network 2025. All Rights Reserved.
-          </p>
+          <p class="text-muted small mb-4 mb-lg-0">&copy; Point Network 2025. All Rights Reserved.</p>
         </div>
         <div class="col-lg-6 text-center text-lg-end my-auto">
           <ul class="list-inline mb-0">
@@ -221,9 +209,9 @@
     </div>
   </footer>
 
-  <!-- Bootstrap core JS-->
+  <!-- Bootstrap core JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Core theme JS-->
-  <script src="js/scripts.js"></script>
+  <!-- Core theme JS -->
+  <script src="{{ asset('js/scripts.js') }}"></script>
 </body>
 </html>

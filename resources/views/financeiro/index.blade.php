@@ -130,44 +130,49 @@
     </div>
 
     <!-- Tabela de Histórico de Transações -->
-    <div class="card mb-5">
-      <div class="card-header">
-        Histórico de Transações
+<div class="card mb-5">
+  <div class="card-header">
+    Histórico de Transações
+  </div>
+  <div class="card-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($historico as $transacao)
+          <tr>
+            <td>{{ optional($transacao->data_transacao)->format('d/m/Y') ?? '---' }}</td>
+            <td>{{ $transacao->descricao }}</td>
+            <td>
+              @if($transacao->tipo == 'debito')
+                - R$ {{ number_format($transacao->valor, 2, ',', '.') }}
+              @else
+                + R$ {{ number_format($transacao->valor, 2, ',', '.') }}
+              @endif
+            </td>
+            <td>{{ ucfirst($transacao->status) }}</td>
+          </tr>
+        @empty
+          <tr>
+            <td colspan="4">Nenhuma transação registrada.</td>
+          </tr>
+        @endforelse
+      </tbody>
+    </table>
+    <!-- Links de paginação para o histórico -->
+    @if($historico->hasPages())
+      <div class="d-flex justify-content-center">
+        {{ $historico->links() }}
       </div>
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Descrição</th>
-              <th>Valor</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse($historico as $transacao)
-              <tr>
-              <td>{{ optional($transacao->data_transacao)->format('d/m/Y') ?? '---' }}</td>
-
-                <td>{{ $transacao->descricao }}</td>
-                <td>
-                  @if($transacao->tipo == 'debito')
-                    - R$ {{ number_format($transacao->valor, 2, ',', '.') }}
-                  @else
-                    + R$ {{ number_format($transacao->valor, 2, ',', '.') }}
-                  @endif
-                </td>
-                <td>{{ ucfirst($transacao->status) }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="4">Nenhuma transação registrada.</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
-    </div>
+    @endif
+  </div>
+</div>
 
     <!-- Seção para Pagamento de Faturas -->
     <!-- Seção para Pagamento de Faturas (tabela com opção de pagar) -->
@@ -229,82 +234,103 @@
     
     <!-- Lista de Faturas do Usuário -->
     <div class="card mb-5">
-      <div class="card-header">
-        Minhas Faturas
+  <div class="card-header">
+    Minhas Faturas
+  </div>
+  <div class="card-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th>Status</th>
+          <th>Emissão</th>
+          <th>Vencimento</th>
+          <th>Pagamento</th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($faturas as $fatura)
+          <tr>
+            <td>{{ $fatura->id }}</td>
+            <td>{{ $fatura->descricao }}</td>
+            <td>R$ {{ number_format($fatura->valor, 2, ',', '.') }}</td>
+            <td>{{ $fatura->status }}</td>
+            <td>{{ $fatura->data_emissao->format('d/m/Y') }}</td>
+            <td>{{ $fatura->data_vencimento->format('d/m/Y') }}</td>
+            <td>
+              @if($fatura->data_pagamento)
+                {{ $fatura->data_pagamento->format('d/m/Y') }}
+              @else
+                ---
+              @endif
+            </td>
+          </tr>
+        @empty
+          <tr>
+            <td colspan="7">Nenhuma fatura cadastrada.</td>
+          </tr>
+        @endforelse
+      </tbody>
+    </table>
+    <!-- Links de paginação para faturas -->
+    @if($faturas->hasPages())
+      <div class="d-flex justify-content-center">
+        {{ $faturas->links() }}
       </div>
-      <div class="card-body">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Descrição</th>
-              <th>Valor</th>
-              <th>Status</th>
-              <th>Emissão</th>
-              <th>Vencimento</th>
-              <th>Pagamento</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse($faturas as $fatura)
-              <tr>
-                <td>{{ $fatura->id }}</td>
-                <td>{{ $fatura->descricao }}</td>
-                <td>R$ {{ number_format($fatura->valor, 2, ',', '.') }}</td>
-                <td>{{ $fatura->status }}</td>
-                <td>{{ $fatura->data_emissao->format('d/m/Y') }}</td>
-                <td>{{ $fatura->data_vencimento->format('d/m/Y') }}</td>
-                <td>
-                  @if($fatura->data_pagamento)
-                    {{ $fatura->data_pagamento->format('d/m/Y') }}
-                  @else
-                    ---
-                  @endif
-                </td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="7">Nenhuma fatura cadastrada.</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
-    </div>
+    @endif
+  </div>
 </div>
 
-<!-- Rodapé -->
+<!-- Footer (mantido)-->
 <footer class="footer bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 text-center text-lg-start my-auto">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item"><a href="#!">About</a></li>
-          <li class="list-inline-item">⋅</li>
-          <li class="list-inline-item"><a href="#!">Contact</a></li>
-          <li class="list-inline-item">⋅</li>
-          <li class="list-inline-item"><a href="#!">Terms of Use</a></li>
-          <li class="list-inline-item">⋅</li>
-          <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
-        </ul>
-        <p class="text-muted small mb-4 mb-lg-0">&copy; Point Network 2025. All Rights Reserved.</p>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+            <ul class="list-inline mb-2">
+              <li class="list-inline-item">
+                <a href="#!">About</a>
+              </li>
+              <li class="list-inline-item">⋅</li>
+              <li class="list-inline-item">
+                <a href="#!">Contact</a>
+              </li>
+              <li class="list-inline-item">⋅</li>
+              <li class="list-inline-item">
+                <a href="#!">Terms of Use</a>
+              </li>
+              <li class="list-inline-item">⋅</li>
+              <li class="list-inline-item">
+                <a href="#!">Privacy Policy</a>
+              </li>
+            </ul>
+            <p class="text-muted small mb-4 mb-lg-0">
+              &copy; Point Network 2025. All Rights Reserved.
+            </p>
+          </div>
+          <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item me-4">
+                <a href="https://www.facebook.com/pointcondominio"
+                  ><i class="bi-facebook fs-3"></i
+                ></a>
+              </li>
+              <li class="list-inline-item me-4">
+                <a href="https://x.com/pointcondominio"
+                  ><i class="bi-twitter fs-3"></i
+                ></a>
+              </li>
+              <li class="list-inline-item">
+                <a href="https://www.instagram.com/point.condominio/"
+                  ><i class="bi-instagram fs-3"></i
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="col-lg-6 text-center text-lg-end my-auto">
-        <ul class="list-inline mb-0">
-          <li class="list-inline-item me-4">
-            <a href="https://www.facebook.com/pointcondominio"><i class="bi-facebook fs-3"></i></a>
-          </li>
-          <li class="list-inline-item me-4">
-            <a href="https://x.com/pointcondominio"><i class="bi-twitter fs-3"></i></a>
-          </li>
-          <li class="list-inline-item">
-            <a href="https://www.instagram.com/point.condominio/"><i class="bi-instagram fs-3"></i></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
+    </footer>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
