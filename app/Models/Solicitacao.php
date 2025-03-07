@@ -21,7 +21,10 @@ class Solicitacao extends Model
         'atendido_por',  // se existir
         'previsao_entrega',
     ];
-
+    protected $casts = [
+        'previsao_entrega' => 'date',  // ou 'datetime'
+    ];
+    
     // Relacionamento: uma solicitação pertence a um usuário
     public function user()
     {

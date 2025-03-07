@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Administradora;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -47,16 +48,30 @@ class UserController extends Controller
         return view('admin.usuarios.index', compact('users'));
     }
     public function edit(User $user)
-    {
-        // Se o usuário logado não for admin, certifique-se que ele só pode editar usuários da mesma administradora
-        if (auth()->user()->categoria !== 'admin' && auth()->user()->administradora_id !== $user->administradora_id) {
-            abort(403, 'Acesso não autorizado.');
-        }
-        
-        // Retorne a view de edição com os dados do usuário
-        // Supondo que você tenha uma view em resources/views/admin/usuarios/edit.blade.php
-        return view('admin.usuarios.edit', compact('user'));
-    }
+{
+    $administradoras = Administradora::all();
+
+    return view('admin.usuarios.edit', [
+        'user' => $user,
+        'administradoras' => $administradoras
+    ]);
+}
+public function update(Request $request, User $user)
+{
+    $request->validate([
+        'name'               => 'required|string|max:255',
+        'email'              => 'required|email|unique:users,email,' . $user->id,
+        'categoria'          => 'required|in:user,admin',
+        'administradora_id'  => 'nullable|exists:administradoras,id',
+        // se quiser permitir a troca de senha, etc.
+    ]);
+
+    $user->update($request->all());
+
+    return redirect()->route('admin.usuarios.index')
+        ->with('status','Usuário atualizado com sucesso!');
+}
+
             
     
 }

@@ -14,6 +14,11 @@ use App\Http\Controllers\SolicitacaoController;
 use App\Http\Controllers\AdminSolicitacaoController;
 use App\Http\Controllers\AdminFaqController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\AdminJourneyController;
+use App\Http\Controllers\FinanceiroController;
+use App\Http\Controllers\AdminFinanceiroController;
+
+
 
 
 // Rota raiz que exibe a tela de login (para usuários não autenticados)
@@ -150,6 +155,18 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     // Enviar despacho / atualizar status
     Route::patch('/solicitacoes/{solicitacao}', [AdminSolicitacaoController::class, 'update'])
         ->name('admin.solicitacoes.update');
+    
+    Route::get('/journeys', [AdminJourneyController::class, 'index'])->name('admin.journeys.index');
+        // Form de criar
+    Route::get('/journeys/create', [AdminJourneyController::class, 'create'])->name('admin.journeys.create');
+        // Salvar
+    Route::post('/journeys', [AdminJourneyController::class, 'store'])->name('admin.journeys.store');
+        // Form de editar
+    Route::get('/journeys/{journey}/edit', [AdminJourneyController::class, 'edit'])->name('admin.journeys.edit');
+        // Atualizar
+    Route::patch('/journeys/{journey}', [AdminJourneyController::class, 'update'])->name('admin.journeys.update');
+        // Excluir
+    Route::delete('/journeys/{journey}', [AdminJourneyController::class, 'destroy'])->name('admin.journeys.destroy');
 
     Route::get('/faqs', [AdminFaqController::class, 'index'])->name('admin.faqs.index');
     Route::get('/faqs/create', [AdminFaqController::class, 'create'])->name('admin.faqs.create');
@@ -189,6 +206,20 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/faqs/search', [FaqController::class, 'search'])->name('faqs.search');
 
+
+Route::middleware('auth')->group(function () {
+    Route::get('/financeiro', [FinanceiroController::class, 'index'])->name('financeiro');
+    Route::post('/financeiro/pagar', [FinanceiroController::class, 'pagarFatura'])->name('financeiro.pagar');
+});
+
+Route::middleware('auth')->prefix('admin')->group(function() {
+    Route::get('/financeiro', [AdminFinanceiroController::class, 'index'])->name('admin.financeiro.index');
+    Route::get('/financeiro/create', [AdminFinanceiroController::class, 'create'])->name('admin.financeiro.create');
+    Route::post('/financeiro', [AdminFinanceiroController::class, 'store'])->name('admin.financeiro.store');
+    Route::get('/financeiro/{fatura}/edit', [AdminFinanceiroController::class, 'edit'])->name('admin.financeiro.edit');
+    Route::patch('/financeiro/{fatura}', [AdminFinanceiroController::class, 'update'])->name('admin.financeiro.update');
+    Route::delete('/financeiro/{fatura}', [AdminFinanceiroController::class, 'destroy'])->name('admin.financeiro.destroy');
+});
 
 // Importa as rotas de autenticação (geralmente definidas no arquivo auth.php)
 require __DIR__.'/auth.php';

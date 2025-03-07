@@ -17,6 +17,7 @@
   <p>
     <strong>Previsão de Entrega:</strong>
     {{ $solicitacao->previsao_entrega ? $solicitacao->previsao_entrega->format('d/m/Y') : 'Não definida' }}
+
   </p>
 
   @if($solicitacao->anexo)

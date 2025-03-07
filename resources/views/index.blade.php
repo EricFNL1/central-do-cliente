@@ -212,28 +212,87 @@
   </div>
   <!-- Lado direito: últimas solicitações -->
   <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-    <h2>Suas Últimas Solicitações</h2>
+  <h2>Suas Últimas Solicitações</h2>
+  @php
+    // Busca as 3 últimas solicitações do usuário autenticado
+    $ultimasSolicitacoes = \App\Models\Solicitacao::where('user_id', Auth::id())
+                          ->latest()
+                          ->take(3)
+                          ->get();
+  @endphp
+
+  @if($ultimasSolicitacoes->isEmpty())
+    <p class="lead mb-3">Você ainda não possui solicitações.</p>
+  @else
+    <ul class="list-group mb-3">
+      @foreach($ultimasSolicitacoes as $solicitacao)
+        <li class="list-group-item">
+          <strong>#{{ $solicitacao->id }}:</strong> {{ $solicitacao->assunto }}
+          <br>
+          <small class="text-muted">
+            Criada em: {{ $solicitacao->created_at->format('d/m/Y H:i') }}
+            | Previsão de Entrega:
+            @if($solicitacao->previsao_entrega)
+              {{ $solicitacao->previsao_entrega->format('d/m/Y') }}
+            @else
+              Não definida
+            @endif
+          </small>
+        </li>
+      @endforeach
+    </ul>
+  @endif
+
+  <a href="{{ route('solicitacoes.index') }}" class="btn">
+    Ver Solicitações →
+  </a>
+</div>
+</div>
+
+  <!-- Lado direito: últimas faturas com padding interno -->
+<!-- Linha para “Últimas Faturas” no mesmo padrão de “Últimas Solicitações” -->
+<div class="row g-0">
+  <!-- Lado esquerdo: imagem (similar a “Últimas Solicitações”) -->
+  <div class="col-lg-6 text-white showcase-img" 
+       style="background-image: url('{{ asset('img/img2.png') }}');">
+  </div>
+
+  <!-- Lado direito: bloco de texto e faturas, com mesma formatação -->
+  <div class="col-lg-6 my-auto showcase-text p-5">
+    <h2 class="mb-3">Últimas Faturas</h2>
+
     @php
-      // Busca as 3 últimas solicitações do usuário autenticado
-      $ultimasSolicitacoes = \App\Models\Solicitacao::where('user_id', Auth::id())
-                            ->latest()
-                            ->take(3)
-                            ->get();
+      // Exemplo: pega as 3 faturas mais recentes da administradora do usuário
+      $admId = Auth::user()->administradora_id;
+      $ultimasFaturas = \App\Models\Fatura::where('administradora_id', $admId)
+                         ->orderBy('created_at', 'desc')
+                         ->take(3)
+                         ->get();
     @endphp
 
-    @if($ultimasSolicitacoes->isEmpty())
-      <p class="lead mb-3">Você ainda não possui solicitações.</p>
+    @if($ultimasFaturas->isEmpty())
+      <p class="lead mb-3">Nenhuma fatura cadastrada.</p>
     @else
       <ul class="list-group mb-3">
-        @foreach($ultimasSolicitacoes as $solicitacao)
+        @foreach($ultimasFaturas as $fatura)
           <li class="list-group-item">
-            <strong>#{{ $solicitacao->id }}:</strong>
-            {{ $solicitacao->assunto }}
+            <strong>#{{ $fatura->id }}:</strong>
+            R$ {{ number_format($fatura->valor, 2, ',', '.') }}
+            ({{ $fatura->status }})
             <br>
             <small class="text-muted">
-              {{ $solicitacao->created_at->format('d/m/Y H:i') }}
-              @if($solicitacao->previsao_entrega)
-                | Previsão: {{ $solicitacao->previsao_entrega->format('d/m/Y') }}
+              Emissão:
+              @if($fatura->data_emissao)
+                {{ $fatura->data_emissao->format('d/m/Y') }}
+              @else
+                ---
+              @endif
+
+              | Vencimento:
+              @if($fatura->data_vencimento)
+                {{ $fatura->data_vencimento->format('d/m/Y') }}
+              @else
+                ---
               @endif
             </small>
           </li>
@@ -241,25 +300,16 @@
       </ul>
     @endif
 
-    <a href="{{ route('solicitacoes.index') }}" class="btn">
-      Ver Solicitações →
+    <!-- Botão ou link de navegação, como no “Últimas Solicitações” -->
+    <a href="{{ route('financeiro') }}" class="btn">
+      Ver Faturas →
     </a>
   </div>
 </div>
 
-  <!-- Segunda linha (permanece inalterada) -->
-  <div class="row g-0">
-    <div class="col-lg-6 text-white showcase-img" style="background-image: url('{{ asset('img/img2.png') }}');"></div>
-    <div class="col-lg-6 my-auto showcase-text">
-      <h2>Melhorando a sua experiência</h2>
-      <p class="lead mb-0">
-        Atualizações constantes e feedback de nossos usuários nos ajudam 
-        a evoluir. Cada recurso é pensado para tornar seu dia a dia mais 
-        produtivo e eficiente.
-      </p>
-    </div>
-  </div>
 </div>
+
+
 
 
   <!-- Terceira linha: área de FAQ -->
@@ -334,91 +384,39 @@
 </section>
 
 
-    <section class="py-5" id="jornada-aprendizado">
-      <div class="container">
-        <!-- Título da seção -->
-        <h2 class="mb-4 text-center">Jornada do Aprendizado</h2>
-    
-        <!-- Linha de cards -->
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-          <!-- Card 1 -->
-          <div class="col">
-            <div class="card h-100 border-0 card-journey">
-              <div class="card-body">
-                <h5 class="card-title">Módulo Financeiro</h5>
-                <p class="card-text">
-                  Entenda como lidar com as finanças, pagamentos e taxas.
-                </p>
-              </div>
-              <div class="card-footer bg-white border-0">
-                <a href="#!" class="link-more">Saiba mais</a>
-              </div>
+<section class="py-5" id="jornada-aprendizado">
+  <div class="container">
+    <h2 class="mb-4 text-center">Jornada do Aprendizado</h2>
+
+    @php
+      // Carrega todos os cards da tabela journeys
+      $journeys = \App\Models\Journey::orderBy('order','asc')->get();
+    @endphp
+
+    <div class="row row-cols-1 row-cols-md-5 g-4">
+      @forelse($journeys as $journey)
+        <div class="col">
+          <div class="card h-100 border-0 card-journey">
+            <div class="card-body">
+              <h5 class="card-title">{{ $journey->title }}</h5>
+              <p class="card-text">{{ $journey->description }}</p>
             </div>
-          </div>
-    
-          <!-- Card 2 -->
-          <div class="col">
-            <div class="card h-100 border-0 card-journey">
-              <div class="card-body">
-                <h5 class="card-title">Cadastros Gerais</h5>
-                <p class="card-text">
-                  Aprenda como cadastrar e gerenciar usuários e dados do sistema.
-                </p>
-              </div>
-              <div class="card-footer bg-white border-0">
-                <a href="#!" class="link-more">Saiba mais</a>
-              </div>
-            </div>
-          </div>
-    
-          <!-- Card 3 -->
-          <div class="col">
-            <div class="card h-100 border-0 card-journey">
-              <div class="card-body">
-                <h5 class="card-title">Transações</h5>
-                <p class="card-text">
-                  Veja como funcionam os tipos de transferências e liquidações.
-                </p>
-              </div>
-              <div class="card-footer bg-white border-0">
-                <a href="#!" class="link-more">Saiba mais</a>
-              </div>
-            </div>
-          </div>
-    
-          <!-- Card 4 -->
-          <div class="col">
-            <div class="card h-100 border-0 card-journey">
-              <div class="card-body">
-                <h5 class="card-title">Operações Internas</h5>
-                <p class="card-text">
-                  Explore as rotinas e processos internos do sistema.
-                </p>
-              </div>
-              <div class="card-footer bg-white border-0">
-                <a href="#!" class="link-more">Saiba mais</a>
-              </div>
-            </div>
-          </div>
-    
-          <!-- Card 5 -->
-          <div class="col">
-            <div class="card h-100 border-0 card-journey">
-              <div class="card-body">
-                <h5 class="card-title">Relatórios</h5>
-                <p class="card-text">
-                  Gere relatórios, estatísticas e acompanhe métricas importantes.
-                </p>
-              </div>
-              <div class="card-footer bg-white border-0">
-                <a href="#!" class="link-more">Saiba mais</a>
-              </div>
+            <div class="card-footer bg-white border-0">
+              @if($journey->link)
+                <a href="{{ $journey->link }}" class="link-more" target="_blank">Saiba mais</a>
+              @else
+                <span class="text-muted">Sem link</span>
+              @endif
             </div>
           </div>
         </div>
-    
-  
-    </section>
+      @empty
+        <p>Nenhum módulo cadastrado.</p>
+      @endforelse
+    </div>
+  </div>
+</section>
+
     
 
     <!-- Call to Action (mantido; opcional remover) -->

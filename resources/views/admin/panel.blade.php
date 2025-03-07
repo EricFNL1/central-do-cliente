@@ -21,8 +21,12 @@
             <li><a href="{{ route('admin.usuarios.create') }}">Cadastrar Usuário</a></li>
             <li><a href="{{ route('admin.logs.index') }}">Logs de Usuários</a></li>
             <li><a href="{{ route('admin.solicitacoes.index') }}">Gerenciar Solicitações</a></li>
-            <!-- Nova guia para gerenciar FAQs -->
+            <li><a href="{{ route('admin.journeys.index') }}">Gerenciar Jornada</a></li>
             <li><a href="{{ route('admin.faqs.index') }}">Gerenciar FAQs</a></li>
+
+            <!-- Novo link para a parte Financeira do Admin -->
+            <li><a href="{{ route('admin.financeiro.index') }}">Financeiro (Admin)</a></li>
+
             <li><a href="{{ route('index') }}">Voltar</a></li>
         </ul>
 

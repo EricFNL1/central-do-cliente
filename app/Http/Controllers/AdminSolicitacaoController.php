@@ -83,16 +83,16 @@ class AdminSolicitacaoController extends Controller
             'funcionario_id' => 'nullable|exists:users,id',
             'previsao_entrega' => 'nullable|date',
         ]);
-
-        // Se quiser armazenar a quem foi atribuída
-        // você poderia ter uma coluna ex: "atendido_por" em solicitacoes
+    
+        // Se estiver definindo um funcionário responsável
         if ($request->filled('funcionario_id')) {
-            $solicitacao->atendido_por = $request->funcionario_id;
+            $solicitacao->atendido_por = $validated['funcionario_id'];
         }
-
-        $solicitacao->status = $request->status;
+    
+        $solicitacao->status = $validated['status'];
+        $solicitacao->previsao_entrega = $validated['previsao_entrega'] ?? null;
         $solicitacao->save();
-
+    
         return redirect()
             ->route('admin.solicitacoes.index')
             ->with('status', 'Solicitação atualizada com sucesso!');

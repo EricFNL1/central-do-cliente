@@ -40,10 +40,11 @@
     </div>
 
     <div>
-      <label for="previsao_entrega">Previsão de Entrega:</label>
-      <input type="date" id="previsao_entrega" name="previsao_entrega"
-             value="{{ old('previsao_entrega', optional($solicitacao->previsao_entrega)->format('Y-m-d')) }}">
-    </div>
+  <label for="previsao_entrega">Previsão de Entrega:</label>
+  <input type="date" id="previsao_entrega" name="previsao_entrega"
+         value="{{ old('previsao_entrega', optional($solicitacao->previsao_entrega)->format('Y-m-d')) }}">
+</div>
+
 
     <button type="submit">Atualizar</button>
   </form>
