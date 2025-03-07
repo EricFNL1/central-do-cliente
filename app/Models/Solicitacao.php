@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Solicitacao extends Model
+{
+    use HasFactory;
+
+    protected $table = 'solicitacoes';
+
+    protected $fillable = [
+        'user_id',
+        'assunto',
+        'descricao',
+        'categoria',
+        'status',
+        'anexo',
+        'atendido_por',  // se existir
+        'previsao_entrega',
+    ];
+    protected $casts = [
+        'previsao_entrega' => 'date',  // ou 'datetime'
+    ];
+    
+    // Relacionamento: uma solicitação pertence a um usuário
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function funcionario()
+{
+    return $this->belongsTo(User::class, 'atendido_por');
+}
+
+}

@@ -1,0 +1,259 @@
+.themepoint{
+    background-color: #33296b;
+}
+.bluepoint{
+   color: #22bbd9;
+}
+
+.btn{
+    background-color: #22bbd900;
+    border: 1px solid #22bbd9;
+    box-sizing: border-box;
+}
+
+.btn:hover{
+    background-color: #7ddef2;
+}
+
+.nav-link{
+    color: white;
+}
+
+.nav-link:hover{
+    color: #22bbd9;
+}
+
+/* Para navegadores baseados em WebKit (Chrome, Safari, Opera) */
+::-webkit-scrollbar {
+    width: 10px; /* Largura da barra de rolagem */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Cor de fundo do trilho */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #33296b; /* Cor principal da rolagem */
+    border-radius: 8px;        /* Arredondamento das pontas */
+    border: 2px solid #f0f0f0; /* Espaço ao redor do thumb (opcional) */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #1ea4bf; /* Cor ao passar o mouse */
+  }
+  
+  /* Para Firefox (uso parcial) */
+  html {
+    /* thumb #22bbd9, track #f0f0f0 */
+    scrollbar-color:#33296b #f0f0f0;
+    scrollbar-width: thin; /* "auto" ou "thin" */
+  }
+  
+  /* Botão de ajuda flutuante */
+.help-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background-color: #22bbd9;
+  color: #fff;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  font-size: 24px;
+}
+
+/* Container do chat */
+.chat-container {
+  position: fixed;
+  bottom: 90px; /* 20px (botão) + 70px de distância */
+  right: 20px;
+  width: 300px;
+  max-width: 90%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabeçalho do chat */
+.chat-header {
+  background-color: #22bbd9;
+  color: #fff;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Botão de fechar no chat */
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Corpo do chat */
+.chat-body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
+
+/* Rodapé do chat */
+.chat-footer {
+  padding: 10px;
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.chat-footer input[type="text"] {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.chat-footer button {
+  margin-left: 5px;
+  background-color: #22bbd9;
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+/* Seção de Jornada do Aprendizado */
+#jornada-aprendizado {
+  background-color: #fff; /* Fundo branco */
+  position: relative;     /* Para posicionar a seta */
+}
+
+/* Cards */
+/* Para cada card, garantimos que ele seja posicionado de forma relativa */
+.card-journey {
+  position: relative;
+  box-shadow: 0 2px 4px rgb(37, 195, 223);
+  transition: transform 0.2s ease;
+  border-radius: 6px;
+  /* Adicione um padding à direita para não sobrepor o conteúdo com a seta */
+  padding-right: 30px;
+}
+
+/* Pseudo-elemento para a seta */
+.card-journey::after {
+  content: "\2192";  /* Unicode para seta para a direita */
+  position: absolute;
+  top: 50%;
+  right: 10px;      /* 10px dentro do card; ajuste se necessário */
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  color: #22bbd9;
+}
+
+.card-journey:hover {
+  transform: translateY(-3px);
+}
+
+/* Título do card */
+.card-journey .card-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Texto do card */
+.card-journey .card-text {
+  color: #666;
+}
+
+/* Link "Saiba mais" */
+.link-more {
+  color: #33296b; /* Exemplo de cor de destaque */
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.link-more:hover {
+  text-decoration: underline;
+}
+
+/* Ícone de seta à direita */
+.arrow-next {
+  position: absolute;
+  top: 50%;
+  right: -20px; /* Ajuste conforme layout */
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+}
+
+.arrow-next a {
+  color: #22bbd9;
+  text-decoration: none;
+}
+
+.arrow-next a:hover {
+  color: #ff8540;
+}
+
+/* Ajuste de cor do botão na coluna de FAQ */
+.btn.btn-outline-primary {
+  border-color: #22bbd9;
+  color: #22bbd9;
+}
+.btn.btn-outline-primary:hover {
+  background-color: #22bbd9;
+  color: #fff;
+}
+
+/* Background e estilo da terceira linha */
+.showcase .bg-light {
+  background-color: #f8f9fa !important; /* Ajuste de cor suave */
+}
+
+/* Para garantir que a coluna da direita tenha fundo branco */
+.showcase .bg-white {
+  background-color: #fff !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Se quiser remover margens extras do “my-auto” no accordion:
+.showcase .col-lg-8.my-auto {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+*/
+
+/* Opcional: estilo adicional para as perguntas do accordion */
+.accordion-button {
+  background-color: #fff;
+  color: #333;
+}
+.accordion-button:hover {
+  background-color: #f2f2f2;
+}
+.accordion-body {
+  background-color: #fff;
+}
+
+.faq-strip {
+  background-color: #f2f2f2; /* Cor de fundo para a faixa */
+  border-radius: 8px;        /* Borda arredondada opcional */
+}
+
+.isticked{
+  color: #22bbd9;
+}
