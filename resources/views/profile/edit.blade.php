@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
+            {{ __('Perfil') }}
         </h2>
     </x-slot>
 
@@ -23,6 +23,9 @@
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
                 </div>
+                <a href="{{ route('solicitacoes.index') }}" class="btn">
+            <i class="bi bi-arrow-left-circle me-1"></i> Voltar
+          </a>
             </div>
         </div>
     </div>
