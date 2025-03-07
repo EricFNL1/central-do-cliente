@@ -78,9 +78,10 @@
 
       <!-- Informações do usuário e Botões à direita -->
       <div class="d-flex align-items-center">
-  @auth
+      @auth
     <div class="dropdown me-2">
-      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+         data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
       </a>
       <ul class="dropdown-menu" aria-labelledby="userDropdown">
@@ -88,18 +89,22 @@
         @if (Auth::user()->categoria === 'admin')
           <li>
             <a class="dropdown-item" href="{{ route('admin.panel') }}">
-              Admin
+              <i class="bi bi-gear me-1"></i> Admin
             </a>
           </li>
         @endif
 
         <li>
-          <a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a>
+          <a class="dropdown-item" href="{{ route('profile.edit') }}">
+            <i class="bi bi-person-badge me-1"></i> Editar Perfil
+          </a>
         </li>
         <li>
           <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="dropdown-item">Logout</button>
+            <button type="submit" class="dropdown-item">
+              <i class="bi bi-box-arrow-right me-1"></i> Logout
+            </button>
           </form>
         </li>
       </ul>
@@ -474,53 +479,140 @@
     </section>
 
     <!-- Footer (mantido)-->
-    <footer class="footer bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
-            <ul class="list-inline mb-2">
-              <li class="list-inline-item">
-                <a href="#!">About</a>
-              </li>
-              <li class="list-inline-item">⋅</li>
-              <li class="list-inline-item">
-                <a href="#!">Contact</a>
-              </li>
-              <li class="list-inline-item">⋅</li>
-              <li class="list-inline-item">
-                <a href="#!">Terms of Use</a>
-              </li>
-              <li class="list-inline-item">⋅</li>
-              <li class="list-inline-item">
-                <a href="#!">Privacy Policy</a>
-              </li>
-            </ul>
-            <p class="text-muted small mb-4 mb-lg-0">
-              &copy; Point Network 2025. All Rights Reserved.
-            </p>
-          </div>
-          <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
-            <ul class="list-inline mb-0">
-              <li class="list-inline-item me-4">
-                <a href="https://www.facebook.com/pointcondominio"
-                  ><i class="bi-facebook fs-3"></i
-                ></a>
-              </li>
-              <li class="list-inline-item me-4">
-                <a href="https://x.com/pointcondominio"
-                  ><i class="bi-twitter fs-3"></i
-                ></a>
-              </li>
-              <li class="list-inline-item">
-                <a href="https://www.instagram.com/point.condominio/"
-                  ><i class="bi-instagram fs-3"></i
-                ></a>
-              </li>
-            </ul>
+    <footer class="pt-5 pb-4" style="background-color: #2e2e2e; color: #fff;">
+  <div class="container">
+    <div class="row align-items-start gy-4">
+      <!-- Coluna: Logo + Endereço (lado a lado) -->
+      <div class="col-12 col-md-3">
+        <!-- Agrupamos logo e texto em um flex container -->
+        <div class="d-flex align-items-start">
+  <!-- Logo -->
+  <img
+    src="img/icone-negativo.png"
+    alt="Point Network Logo"
+    style="
+      height: 40px; 
+      width: auto; 
+      margin-right: 1rem; 
+      margin-top: -1px; /* puxa o ícone um pouco para cima */
+    "
+  />
+          <!-- Endereço e Contato -->
+          <div style="line-height: 1.6;">
+            Rua Terez de Indaiá, 225 - Centro<br />
+            Mogi Mirim - SP<br />
+            CEP: 13800-351
+            <div class="mt-2">
+              <p class="mb-0">contato@pointnetwork.com.br</p>
+              <p class="mb-0">(19) 3800-0000</p>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
+
+      <!-- Coluna: Institucional -->
+      <div class="col-6 col-md-2">
+        <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">
+          Institucional
+        </h6>
+        <ul class="list-unstyled mb-0">
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Sobre nós</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Termos de uso</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Política de privacidade</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Contato</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Coluna: Produtos -->
+      <div class="col-6 col-md-2">
+        <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">
+          Produtos
+        </h6>
+        <ul class="list-unstyled mb-0">
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Point Condomínio</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Point SaaS</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Point ID</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Coluna: Serviços -->
+      <div class="col-6 col-md-3">
+        <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">
+          Serviços
+        </h6>
+        <ul class="list-unstyled mb-0">
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Cobrança digital</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Boleto digital</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Receber em cartão de crédito</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Parking</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Seguro condominial</a>
+          </li>
+          <li class="mb-2">
+            <a href="#!" style="color: #fff; text-decoration: none;">Crédito para condomínio</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Coluna: Redes Sociais -->
+      <div class="col-6 col-md-2 text-md-start text-lg-end">
+        <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">
+          Redes-Sociais
+        </h6>
+        <ul class="list-inline">
+          <li class="list-inline-item me-3">
+            <a href="https://www.facebook.com/pointcondominio" style="color: #fff;">
+              <i class="bi-facebook fs-5"></i>
+            </a>
+          </li>
+          <li class="list-inline-item me-3">
+            <a href="https://x.com/pointcondominio" style="color: #fff;">
+              <i class="bi-twitter fs-5"></i>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="https://www.instagram.com/point.condominio/" style="color: #fff;">
+              <i class="bi-instagram fs-5"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Linha final: direitos reservados -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <p class="mb-0 small text-center text-md-start" style="opacity: 0.8;">
+          &copy; 2025 Point Network. Todos os direitos reservados.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
 
     <!-- Botão de Ajuda Flutuante -->
 <div id="help-button" class="help-button">
