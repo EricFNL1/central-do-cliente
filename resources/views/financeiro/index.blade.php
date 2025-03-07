@@ -170,21 +170,54 @@
     </div>
 
     <!-- Seção para Pagamento de Faturas -->
-    <div class="mb-5">
-      <h2>Pagar Fatura</h2>
-      <form action="{{ route('financeiro.pagar') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-          <label for="faturaId" class="form-label">ID da Fatura</label>
-          <input type="text" class="form-control" id="faturaId" name="fatura_id" placeholder="Digite o ID da fatura">
-        </div>
-        <div class="mb-3">
-          <label for="valorPagamento" class="form-label">Valor</label>
-          <input type="number" class="form-control" id="valorPagamento" name="valor" placeholder="Valor a pagar" step="0.01">
-        </div>
-        <button type="submit" class="btn">Realizar Pagamento</button>
-      </form>
-    </div>
+    <!-- Seção para Pagamento de Faturas (tabela com opção de pagar) -->
+<!-- Seção para Pagamento de Faturas (tabela com opção de pagar) -->
+<div class="mb-5">
+  <h2>Pagar Fatura</h2>
+  @php
+    // Filtra apenas as faturas pendentes da administradora do usuário logado
+    $admId = Auth::user()->administradora_id;
+    $faturasPendentesList = \App\Models\Fatura::where('administradora_id', $admId)
+                            ->where('status', 'pendente')
+                            ->orderBy('data_vencimento', 'asc')
+                            ->get();
+  @endphp
+
+  @if($faturasPendentesList->isEmpty())
+    <p>Nenhuma fatura pendente para pagamento.</p>
+  @else
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th>Vencimento</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($faturasPendentesList as $fatura)
+          <tr>
+            <td>{{ $fatura->id }}</td>
+            <td>{{ $fatura->descricao }}</td>
+            <td>R$ {{ number_format($fatura->valor, 2, ',', '.') }}</td>
+            <td>{{ $fatura->data_vencimento->format('d/m/Y') }}</td>
+            <td>
+              <!-- Formulário para pagar a fatura -->
+              <form action="{{ route('financeiro.pagar') }}" method="POST" class="form-pagar">
+                @csrf
+                <input type="hidden" name="fatura_id" value="{{ $fatura->id }}">
+                <input type="hidden" name="valor" value="{{ $fatura->valor }}">
+                <button type="submit" class="btn btn-sm">Pagar</button>
+              </form>
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  @endif
+</div>
 
     <!-- Dashboard Financeiro com Gráfico de Pizza -->
     <div class="mb-5">
@@ -311,5 +344,35 @@
       }
     });
   </script>
+
+  <!-- Inclua SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Script para interceptar o envio do formulário -->
+<script>
+  // Seleciona todos os formulários com a classe "form-pagar"
+  const forms = document.querySelectorAll('.form-pagar');
+
+  forms.forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Impede o envio imediato
+
+      Swal.fire({
+        title: 'Confirmar Pagamento',
+        text: "Deseja realmente pagar essa fatura?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, pagar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Se confirmado, envia o formulário
+          form.submit();
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
