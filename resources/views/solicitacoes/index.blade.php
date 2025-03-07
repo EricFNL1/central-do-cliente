@@ -133,7 +133,7 @@
                   $badgeClass = match($solicitacao->status) {
                     'aberto' => 'bg-danger',
                     'em-andamento' => 'bg-warning text-dark',
-                    'fechado' => 'bg-success',
+                    'finalizado' => 'bg-success',
                     default => 'bg-secondary',
                   };
                 @endphp

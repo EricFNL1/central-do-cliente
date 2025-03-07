@@ -33,8 +33,11 @@
         <option value="em-andamento" {{ $solicitacao->status === 'em-andamento' ? 'selected' : '' }}>
           Em Andamento
         </option>
-        <option value="fechado" {{ $solicitacao->status === 'fechado' ? 'selected' : '' }}>
-          Fechado
+        <option value="finalizado" {{ $solicitacao->status === 'finalizado' ? 'selected' : '' }}>
+  Finalizado
+</option>
+
+          Finalizado
         </option>
       </select>
     </div>

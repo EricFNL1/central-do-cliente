@@ -229,15 +229,31 @@
         <li class="list-group-item">
           <strong>#{{ $solicitacao->id }}:</strong> {{ $solicitacao->assunto }}
           <br>
-          <small class="text-muted">
-            Criada em: {{ $solicitacao->created_at->format('d/m/Y H:i') }}
-            | Previsão de Entrega:
-            @if($solicitacao->previsao_entrega)
-              {{ $solicitacao->previsao_entrega->format('d/m/Y') }}
-            @else
-              Não definida
-            @endif
-          </small>
+          @php
+  // Define a cor do badge conforme o status
+  $badgeClass = match($solicitacao->status) {
+    'aberto' => 'bg-danger',
+    'em-andamento' => 'bg-warning text-dark',
+    'finalizado' => 'bg-success',
+    default => 'bg-secondary',
+  };
+@endphp
+
+<small class="text-muted">
+  Criada em: {{ $solicitacao->created_at->format('d/m/Y') }}
+  | Previsão de Entrega:
+  @if($solicitacao->previsao_entrega)
+    {{ $solicitacao->previsao_entrega->format('d/m/Y') }}
+  @else
+    Não definida
+  @endif
+
+  | Status:
+  <span class="badge {{ $badgeClass }}">
+    {{ ucfirst($solicitacao->status) }}
+  </span>
+</small>
+
         </li>
       @endforeach
     </ul>
@@ -258,7 +274,7 @@
   </div>
 
   <!-- Lado direito: bloco de texto e faturas, com mesma formatação -->
-  <div class="col-lg-6 my-auto showcase-text p-5">
+ <div class="col-lg-6 my-auto showcase-text p-7">
     <h2 class="mb-3">Últimas Faturas</h2>
 
     @php
@@ -275,10 +291,26 @@
     @else
       <ul class="list-group mb-3">
         @foreach($ultimasFaturas as $fatura)
+
+          @php
+            // Define a cor do badge conforme o status
+            $badgeClass = match($fatura->status) {
+              'pendente' => 'bg-warning text-dark',
+              'pago'     => 'bg-success',
+              'cancelado'=> 'bg-danger',
+              default    => 'bg-secondary',
+            };
+          @endphp
+
           <li class="list-group-item">
             <strong>#{{ $fatura->id }}:</strong>
             R$ {{ number_format($fatura->valor, 2, ',', '.') }}
-            ({{ $fatura->status }})
+
+            <!-- Status como badge colorido -->
+            <span class="badge {{ $badgeClass }}">
+              {{ ucfirst($fatura->status) }}
+            </span>
+
             <br>
             <small class="text-muted">
               Emissão:

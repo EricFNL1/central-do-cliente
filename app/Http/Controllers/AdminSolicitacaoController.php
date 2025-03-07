@@ -74,12 +74,12 @@ class AdminSolicitacaoController extends Controller
 
         // Exemplo de validação
         $validated = $request->validate([
-            'status' => 'required|in:aberto,em-andamento,fechado',
+            'status' => 'required|in:aberto,em-andamento,finalizado',
             'funcionario_id' => 'nullable|exists:users,id', // se quiser atribuir a um user
         ]);
 
         $validated = $request->validate([
-            'status' => 'required|in:aberto,em-andamento,fechado',
+            'status' => 'required|in:aberto,em-andamento,finalizado',
             'funcionario_id' => 'nullable|exists:users,id',
             'previsao_entrega' => 'nullable|date',
         ]);
