@@ -17,6 +17,8 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\AdminJourneyController;
 use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\AdminFinanceiroController;
+use App\Http\Controllers\ChatController;
+
 
 
 
@@ -219,6 +221,21 @@ Route::middleware('auth')->prefix('admin')->group(function() {
     Route::get('/financeiro/{fatura}/edit', [AdminFinanceiroController::class, 'edit'])->name('admin.financeiro.edit');
     Route::patch('/financeiro/{fatura}', [AdminFinanceiroController::class, 'update'])->name('admin.financeiro.update');
     Route::delete('/financeiro/{fatura}', [AdminFinanceiroController::class, 'destroy'])->name('admin.financeiro.destroy');
+});
+
+
+Route::post('/chat', [ChatController::class, 'createChat']);
+Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+Route::get('/chat/{chatId}/messages', [ChatController::class, 'getMessages']);
+Route::get('/chats', [ChatController::class, 'getAllChats']);
+
+Route::get('/test-broadcast', function() {
+    broadcast(new \App\Events\TestEvent());
+    return 'Test event fired!';
+});
+
+Route::get('/debug-config', function() {
+    return config('broadcasting.connections.pusher');
 });
 
 // Importa as rotas de autenticação (geralmente definidas no arquivo auth.php)

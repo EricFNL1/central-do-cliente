@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Central do Cliente</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
@@ -614,7 +615,7 @@
 
 
 
-    <!-- Botão de Ajuda Flutuante -->
+<!-- Botão de Ajuda Flutuante (cliente) -->
 <div id="help-button" class="help-button">
   <i class="bi bi-chat-dots-fill"></i>
 </div>
@@ -622,17 +623,20 @@
 <!-- Container do Chat (inicialmente oculto) -->
 <div id="chat-container" class="chat-container d-none">
   <div class="chat-header">
-    <span>Como podemos ajudar?</span>
+    <span id="chat-title">Como podemos ajudar?</span>
     <button id="close-chat" class="close-btn">&times;</button>
   </div>
-  <div class="chat-body">
+  <div class="chat-body" id="chat-body">
     <p><strong>Point Assistente Virtual:</strong> Olá! Em que posso ajudar?</p>
   </div>
   <div class="chat-footer">
-    <input type="text" placeholder="Digite sua mensagem..." />
-    <button>Enviar</button>
+    <!-- input de texto -->
+    <input type="text" id="chat-input" placeholder="Digite sua mensagem..." />
+    <!-- botão de envio -->
+    <button id="send-message" type="button">Enviar</button>
   </div>
 </div>
+
 
 
     <!-- Bootstrap core JS-->
