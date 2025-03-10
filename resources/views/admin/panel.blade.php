@@ -21,6 +21,11 @@
           height: 200px;
           overflow-y: auto;
       }
+      /* Estilo para indicar que o chat está encerrado */
+      .closed {
+          background: #eee;
+          color: #777;
+      }
     </style>
 </head>
 <body>
@@ -84,14 +89,14 @@
             chatList.innerHTML = '';
             chats.forEach(chat => {
               const li = document.createElement('li');
-              li.innerHTML = `Chat ID: ${chat.id} - Cliente: ${chat.client_id}`;
+              li.innerHTML = `Chat ID: ${chat.id} - Cliente: ${chat.client_id} - Status: ${chat.status}`;
               
               // Botão para abrir o chat
               const openBtn = document.createElement('button');
               openBtn.textContent = 'Abrir Chat';
               openBtn.style.marginLeft = '10px';
               openBtn.addEventListener('click', function() {
-                openAdminChat(chat.id);
+                openAdminChat(chat.id, chat.status);
               });
               li.appendChild(openBtn);
               chatList.appendChild(li);
@@ -116,6 +121,15 @@
                 } else {
                   p.innerHTML = `<strong>Cliente:</strong> ${msg.content}`;
                 }
+                // Se houver anexo, exibe um link
+                if (msg.attachment) {
+                  const a = document.createElement('a');
+                  a.href = `/storage/${msg.attachment}`;
+                  a.target = "_blank";
+                  a.textContent = 'Ver anexo';
+                  p.appendChild(document.createElement('br'));
+                  p.appendChild(a);
+                }
                 adminChatBody.appendChild(p);
               });
             }
@@ -123,59 +137,112 @@
           .catch(err => console.error('Erro ao carregar mensagens do chat:', err));
       }
 
-      // Função para abrir a interface do chat para o admin e configurar o envio de mensagens
-      function openAdminChat(chatId) {
-        // Seleciona o container onde o chat será inserido
+      // Função para abrir a interface do chat para o admin e configurar o envio de mensagens e anexos
+      function openAdminChat(chatId, chatStatus) {
         const adminChatDiv = document.getElementById('admin-chat-div');
         // Cria (ou substitui) a interface do chat
         adminChatDiv.innerHTML = `
           <h2>Chat ID: ${chatId}</h2>
           <div id="admin-chat-body" style="border: 1px solid #ccc; width: 300px; height: 200px; overflow:auto; margin-bottom:10px;"></div>
-          <input type="text" id="admin-chat-input" placeholder="Digite sua resposta..." />
-          <button id="admin-send-message" type="button">Enviar</button>
+          <input type="text" id="admin-chat-input" placeholder="Digite sua resposta..." ${chatStatus === 'closed' ? 'disabled' : ''} />
+          <input type="file" id="admin-file-input" ${chatStatus === 'closed' ? 'disabled' : ''} />
+          <button id="admin-send-message" type="button" ${chatStatus === 'closed' ? 'disabled' : ''}>Enviar</button>
+          <button id="close-chat-admin" type="button" ${chatStatus === 'closed' ? 'disabled' : ''}>Encerrar Chat</button>
+          ${chatStatus === 'closed' ? '<p style="color: red;"><em>Chat encerrado.</em></p>' : ''}
         `;
 
-        // Carrega o histórico de mensagens para esse chat
         loadAdminChatMessages(chatId);
 
-        // Configura o envio de mensagem pelo admin
         const adminSendBtn = document.getElementById('admin-send-message');
         const adminChatInput = document.getElementById('admin-chat-input');
+        const adminFileInput = document.getElementById('admin-file-input');
         const adminChatBody = document.getElementById('admin-chat-body');
         // Exemplo: ID do admin (substitua pelo ID real do usuário logado)
         const adminUserId = 999;
 
+        // Envio de mensagem (com anexos, se houver)
         adminSendBtn.addEventListener('click', function() {
           const content = adminChatInput.value.trim();
-          if (!content) return;
+          const file = adminFileInput.files[0];
+          if (!content && !file) return; // Não envia se não houver texto ou arquivo
+
+          // Cria um FormData para enviar multipart/form-data
+          const formData = new FormData();
+          formData.append('chat_id', chatId);
+          formData.append('user_id', adminUserId);
+          formData.append('content', content);
+          if (file) {
+            formData.append('attachment', file);
+          }
 
           fetch('/chat/send', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
               'X-CSRF-TOKEN': csrfToken
+              // Não defina 'Content-Type', deixe o navegador definir para multipart/form-data
             },
-            body: JSON.stringify({ chat_id: chatId, user_id: adminUserId, content: content })
+            body: formData
           })
           .then(response => response.json())
           .then(data => {
             const p = document.createElement('p');
             p.innerHTML = `<strong>Você (Admin):</strong> ${data.content}`;
+            // Se houver anexo na resposta, exibe um link
+            if (data.attachment) {
+              const a = document.createElement('a');
+              a.href = `/storage/${data.attachment}`;
+              a.target = "_blank";
+              a.textContent = 'Ver anexo';
+              p.appendChild(document.createElement('br'));
+              p.appendChild(a);
+            }
             adminChatBody.appendChild(p);
           })
           .catch(err => console.error('Erro ao enviar mensagem (Admin):', err));
 
           adminChatInput.value = '';
+          adminFileInput.value = ''; // Limpa o campo de arquivo
+        });
+
+        // Encerrar o chat
+        document.getElementById('close-chat-admin').addEventListener('click', function() {
+          fetch(`/chat/${chatId}/close`, {
+            method: 'PATCH',
+            headers: {
+              'X-CSRF-TOKEN': csrfToken
+            }
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data.message);
+            // Atualiza a interface para indicar que o chat está encerrado
+            const adminChatInput = document.getElementById('admin-chat-input');
+            const adminFileInput = document.getElementById('admin-file-input');
+            const adminSendBtn = document.getElementById('admin-send-message');
+            adminChatInput.disabled = true;
+            adminFileInput.disabled = true;
+            adminSendBtn.disabled = true;
+            const adminChatBody = document.getElementById('admin-chat-body');
+            adminChatBody.innerHTML += '<p style="color: red;"><em>Chat encerrado.</em></p>';
+          })
+          .catch(err => console.error('Erro ao encerrar chat:', err));
         });
 
         // Inscreve o admin no canal para receber mensagens em tempo real para este chat
         if (window.Echo) {
           window.Echo.channel(`chat.${chatId}`)
             .listen('MessageSent', (e) => {
-              // Exibe a mensagem se ela não foi enviada pelo admin
               if (e.message.user_id != adminUserId) {
                 const p = document.createElement('p');
                 p.innerHTML = `<strong>Cliente:</strong> ${e.message.content}`;
+                if (e.message.attachment) {
+                  const a = document.createElement('a');
+                  a.href = `/storage/${e.message.attachment}`;
+                  a.target = "_blank";
+                  a.textContent = 'Ver anexo';
+                  p.appendChild(document.createElement('br'));
+                  p.appendChild(a);
+                }
                 adminChatBody.appendChild(p);
               }
             });
@@ -185,7 +252,7 @@
       // Carrega a lista de chats abertos assim que a página do painel for carregada
       loadOpenChats();
 
-      // Opcional: você pode configurar um botão ou ação para recarregar a lista periodicamente
+      // Opcional: recarregar a lista periodicamente (ex: a cada 30 segundos)
       // setInterval(loadOpenChats, 30000);
     })();
     </script>

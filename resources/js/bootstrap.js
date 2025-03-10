@@ -10,14 +10,8 @@ window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY || process.env.VITE_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER || process.env.VITE_PUSHER_APP_CLUSTER,
-    forceTLS: true
+    key: import.meta.env.VITE_PUSHER_APP_KEY,   // ou process.env.MIX_PUSHER_APP_KEY se for Mix
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: true,
 });
 
-
-// Exemplo: ouvindo o canal 'test-channel' para evento 'my-event'
-window.Echo.channel('test-channel')
-  .listen('.my-event', (e) => {
-    console.log('Evento recebido:', e);
-  });

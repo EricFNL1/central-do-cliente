@@ -1,27 +1,29 @@
 (function() {
   const helpButton = document.getElementById('help-button');
-  if (!helpButton) return; // Se não existir o botão, sai daqui
+  if (!helpButton) {
+    console.error('Elemento help-button não encontrado.');
+    return;
+  }
 
-  // Exemplos de IDs. Em produção, você pode obter userId do Auth
-  let chatId = null;    // Inicialmente, não temos chat
-  const userId = 123;   // ID do cliente
+  let chatId = null;
+  const userId = 123; // Ajuste para pegar do Auth, se disponível
+  let chatStatus = 'open';
 
   const chatContainer = document.getElementById('chat-container');
-  const closeChat = document.getElementById('close-chat');
+  const closeChatBtn = document.getElementById('close-chat');
   const sendMessageBtn = document.getElementById('send-message');
   const chatInput = document.getElementById('chat-input');
   const chatBody = document.getElementById('chat-body');
+  const fileInput = document.getElementById('file-input');
+  const startNewChatBtn = document.getElementById('start-new-chat');
 
-  let isSubscribed = false; // Para evitar inscrever no canal múltiplas vezes
-
-  // Obtém o token CSRF do meta
   const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
-  /**
-   * Cria ou obtém o chat do usuário (client_id).
-   * O endpoint deve retornar algo como: { id: 7, client_id: 123, admin_id: null, ... }
-   */
-  function getOrCreateChat() {
+  console.log('Iniciando script de chat...');
+
+  // Função para criar ou obter o chat aberto do usuário
+  function createOrGetOpenChat() {
+    console.log('Criando/obtendo chat para client_id:', userId);
     return fetch('/chat', {
       method: 'POST',
       headers: {
@@ -30,109 +32,186 @@
       },
       body: JSON.stringify({ client_id: userId })
     })
-    .then(response => response.json())
+    .then(res => {
+      if (!res.ok) {
+        console.error('Erro na requisição createOrGetOpenChat:', res.statusText);
+      }
+      return res.json();
+    })
     .then(chat => {
+      console.log('Chat obtido:', chat);
       chatId = chat.id;
-      return chatId;
+      chatStatus = chat.status;
+      return chat;
     })
     .catch(err => {
       console.error('Erro ao criar/obter chat:', err);
     });
   }
 
-  /**
-   * Carrega o histórico de mensagens para o chat atual.
-   */
+  // Função para carregar o histórico de mensagens do chat atual
   function loadChatMessages() {
-    if (!chatId) return;
-    // GET requests geralmente não exigem CSRF, mas se precisar, você pode incluir o token
+    if (!chatId) {
+      console.warn('chatId não definido. Não foi possível carregar mensagens.');
+      return;
+    }
+    console.log('Carregando mensagens para chatId:', chatId);
     fetch(`/chat/${chatId}/messages`)
-      .then(response => response.json())
+      .then(res => {
+        if (!res.ok) console.error('Erro ao carregar mensagens:', res.statusText);
+        return res.json();
+      })
       .then(messages => {
-        chatBody.innerHTML = ''; // Limpa o histórico
+        chatBody.innerHTML = '';
         messages.forEach(msg => {
-          const p = document.createElement('p');
-          if (msg.user_id == userId) {
-            p.innerHTML = `<strong>Você:</strong> ${msg.content}`;
-          } else {
-            p.innerHTML = `<strong>Atendente:</strong> ${msg.content}`;
-          }
-          chatBody.appendChild(p);
+          renderMessage(msg);
         });
       })
-      .catch(error => console.error('Erro ao carregar mensagens:', error));
+      .catch(err => console.error('Erro ao carregar mensagens:', err));
   }
 
-  /**
-   * Inscreve-se no canal do chat para receber mensagens em tempo real.
-   */
-  function subscribeToChannel() {
-    if (isSubscribed || !window.Echo || !chatId) return;
-    isSubscribed = true;
+  // Função para renderizar uma mensagem no chatBody
+  function renderMessage(msg) {
+    const p = document.createElement('p');
+    if (msg.user_id == userId) {
+      p.innerHTML = `<strong>Você:</strong> ${msg.content}`;
+    } else {
+      p.innerHTML = `<strong>Atendente:</strong> ${msg.content}`;
+    }
+    if (msg.attachment) {
+      const a = document.createElement('a');
+      a.href = `/storage/${msg.attachment}`;
+      a.target = '_blank';
+      a.textContent = 'Ver anexo';
+      p.appendChild(document.createElement('br'));
+      p.appendChild(a);
+    }
+    chatBody.appendChild(p);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
 
+  // Função para se inscrever no canal do chat (para receber mensagens em tempo real)
+  function subscribeToChannel() {
+    if (!window.Echo || !chatId) {
+      console.warn('Laravel Echo não disponível ou chatId não definido.');
+      return;
+    }
+    console.log('Inscrevendo no canal chat.' + chatId);
     window.Echo.channel(`chat.${chatId}`)
       .listen('MessageSent', (e) => {
-        // Se a mensagem não foi enviada pelo cliente, exibe como "Atendente"
         if (e.message.user_id != userId) {
-          const p = document.createElement('p');
-          p.innerHTML = `<strong>Atendente:</strong> ${e.message.content}`;
-          chatBody.appendChild(p);
+          console.log('Mensagem recebida via Echo:', e.message);
+          renderMessage(e.message);
         }
       });
   }
 
-  /**
-   * Lida com o clique no botão de ajuda.
-   * - Se o chat estava oculto, criamos/pegamos o chat e carregamos as mensagens.
-   */
-  helpButton.addEventListener('click', async function() {
-    // Alterna a exibição do chat
-    chatContainer.classList.toggle('d-none');
-
-    // Se o chat foi aberto
-    if (!chatContainer.classList.contains('d-none')) {
-      // 1) Cria ou obtém o chat se ainda não tivermos um chatId
-      if (!chatId) {
-        await getOrCreateChat();
+  // Atualiza a interface do chat conforme o status (open/closed)
+  function updateUIBasedOnStatus() {
+    if (chatStatus === 'closed') {
+      chatInput.disabled = true;
+      sendMessageBtn.disabled = true;
+      fileInput.disabled = true;
+      if (startNewChatBtn) {
+        startNewChatBtn.style.display = 'inline-block';
       }
-      // 2) Carrega as mensagens
-      loadChatMessages();
-      // 3) Inscreve no canal (caso ainda não esteja inscrito)
-      subscribeToChannel();
+      chatBody.innerHTML += '<p style="color:red;"><em>Chat encerrado pelo admin.</em></p>';
+    } else {
+      chatInput.disabled = false;
+      sendMessageBtn.disabled = false;
+      fileInput.disabled = false;
+      if (startNewChatBtn) {
+        startNewChatBtn.style.display = 'none';
+      }
     }
-  });
+  }
 
-  /**
-   * Fecha o chat ao clicar no botão de fechar (x).
-   */
-  closeChat.addEventListener('click', function() {
+  // Abre o chat e configura o fluxo (cria/obtém chat se necessário)
+  async function openUserChat() {
+    chatContainer.classList.toggle('d-none');
+    if (!chatContainer.classList.contains('d-none')) {
+      if (!chatId || chatStatus === 'closed') {
+        chatId = null;
+        chatBody.innerHTML = '<p><strong>Carregando chat...</strong></p>';
+        await createOrGetOpenChat();
+      }
+      loadChatMessages();
+      subscribeToChannel();
+      updateUIBasedOnStatus();
+    }
+  }
+
+  helpButton.addEventListener('click', openUserChat);
+
+  closeChatBtn.addEventListener('click', function() {
     chatContainer.classList.add('d-none');
   });
 
-  /**
-   * Envia mensagem ao clicar no botão "Enviar".
-   */
+  // Envia mensagem (com anexo, se houver)
   sendMessageBtn.addEventListener('click', function() {
+    if (!chatId || chatStatus === 'closed') {
+      console.warn('Chat não está aberto ou já foi encerrado.');
+      return;
+    }
     const content = chatInput.value.trim();
-    if (!content || !chatId) return;
+    const file = fileInput.files[0];
+    if (!content && !file) {
+      console.warn('Nenhuma mensagem ou arquivo para enviar.');
+      return;
+    }
 
-    fetch('/chat/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken
-      },
-      body: JSON.stringify({ chat_id: chatId, user_id: userId, content: content })
-    })
-    .then(response => response.json())
-    .then(data => {
-      // Exibe a mensagem enviada pelo cliente
-      const p = document.createElement('p');
-      p.innerHTML = `<strong>Você:</strong> ${data.content}`;
-      chatBody.appendChild(p);
-    })
-    .catch(err => console.error('Erro ao enviar mensagem:', err));
+    let fetchOptions = {};
+    if (file) {
+      const formData = new FormData();
+      formData.append('chat_id', chatId);
+      formData.append('user_id', userId);
+      formData.append('content', content);
+      formData.append('attachment', file);
 
-    chatInput.value = '';
+      fetchOptions = {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken
+        },
+        body: formData
+      };
+    } else {
+      fetchOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({ chat_id: chatId, user_id: userId, content: content })
+      };
+    }
+
+    fetch('/chat/send', fetchOptions)
+      .then(res => {
+        if (!res.ok) {
+          console.error('Erro ao enviar mensagem. Status:', res.status);
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log('Mensagem enviada:', data);
+        renderMessage(data);
+        chatInput.value = '';
+        fileInput.value = '';
+      })
+      .catch(err => console.error('Erro ao enviar mensagem:', err));
   });
+
+  // Configura o botão "Novo Chat" para reiniciar o chat se estiver encerrado
+  if (startNewChatBtn) {
+    startNewChatBtn.addEventListener('click', async function() {
+      chatId = null;
+      chatStatus = 'open';
+      chatBody.innerHTML = '<p><strong>Iniciando novo chat...</strong></p>';
+      await createOrGetOpenChat();
+      loadChatMessages();
+      subscribeToChannel();
+      updateUIBasedOnStatus();
+    });
+  }
 })();

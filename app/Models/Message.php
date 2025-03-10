@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    protected $fillable = ['chat_id', 'user_id', 'content'];
+    protected $fillable = ['chat_id', 'user_id', 'content', 'attachment'];
+
 
     public function chat()
     {

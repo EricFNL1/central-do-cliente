@@ -621,21 +621,22 @@
 </div>
 
 <!-- Container do Chat (inicialmente oculto) -->
-<div id="chat-container" class="chat-container d-none">
+<div id="chat-container" class="chat-container d-none" style="width: 400px;">
   <div class="chat-header">
     <span id="chat-title">Como podemos ajudar?</span>
     <button id="close-chat" class="close-btn">&times;</button>
   </div>
-  <div class="chat-body" id="chat-body">
+  <div class="chat-body" id="chat-body" style="height: 300px; overflow-y: auto;">
     <p><strong>Point Assistente Virtual:</strong> Olá! Em que posso ajudar?</p>
   </div>
   <div class="chat-footer">
-    <!-- input de texto -->
     <input type="text" id="chat-input" placeholder="Digite sua mensagem..." />
-    <!-- botão de envio -->
+    <input type="file" id="file-input" style="margin-right: 5px;" />
+    <button id="start-new-chat" type="button" style="display: none;">Novo Chat</button>
     <button id="send-message" type="button">Enviar</button>
   </div>
 </div>
+
 
 
 
@@ -643,7 +644,12 @@
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     ></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
+<!-- Carrega o JS que configura o Echo (compilado pelo Vite/Mix) -->
+@vite(['resources/js/app.js', 'resources/css/app.css'])
+
+
+<!-- Depois, carrega o script do chat -->
+<script src="js/scripts.js"></script>
+
   </body>
 </html>
