@@ -48,34 +48,43 @@
           </li>
         </ul>
         <div class="d-flex align-items-center">
-          @auth
-            <div class="dropdown me-2">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
-                 aria-expanded="false">
-                <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                @if (Auth::user()->categoria === 'admin')
-                  <li>
-                    <a class="dropdown-item" href="{{ route('admin.panel') }}">Admin</a>
-                  </li>
-                @endif
-                <li>
-                  <a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a>
-                </li>
-                <li>
-                  <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dropdown-item">Logout</button>
-                  </form>
-                </li>
-              </ul>
-            </div>
-          @endauth
-          <a class="btn btn-secondary me-2" href="https://pointcondominio.com.br/administradora">
-            <i class="bi bi-arrow-left-circle me-1"></i>Voltar para o Sistema
+      @auth
+    <div class="dropdown me-2">
+      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+         data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="userDropdown">
+        {{-- Se for admin, exibe o link para a rota admin --}}
+        @if (Auth::user()->categoria === 'admin')
+          <li>
+            <a class="dropdown-item" href="{{ route('admin.panel') }}">
+              <i class="bi bi-gear me-1"></i> Admin
+            </a>
+          </li>
+        @endif
+
+        <li>
+          <a class="dropdown-item" href="{{ route('profile.edit') }}">
+            <i class="bi bi-person-badge me-1"></i> Editar Perfil
           </a>
-        </div>
+        </li>
+        <li>
+          <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="dropdown-item">
+              <i class="bi bi-box-arrow-right me-1"></i> Logout
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  @endauth
+
+  <a class="btn btn-secondary me-2" href="https://pointcondominio.com.br/administradora">
+    <i class="bi bi-arrow-left-circle me-1"></i>Voltar para o Sistema
+  </a>
+</div>
       </div>
     </div>
   </nav>
