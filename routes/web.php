@@ -17,6 +17,8 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\AdminJourneyController;
 use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\AdminFinanceiroController;
+use App\Http\Controllers\ChatController;
+
 
 
 
@@ -221,5 +223,41 @@ Route::middleware('auth')->prefix('admin')->group(function() {
     Route::delete('/financeiro/{fatura}', [AdminFinanceiroController::class, 'destroy'])->name('admin.financeiro.destroy');
 });
 
-// Importa as rotas de autenticação (geralmente definidas no arquivo auth.php)
+
+
+
+Route::get('/test-broadcast', function() {
+    broadcast(new \App\Events\TestEvent());
+    return 'Test event fired!';
+});
+
+Route::get('/debug-config', function() {
+    return config('broadcasting.connections.pusher');
+});
+
+
+// Cria ou obtém chat 'open'
+Route::post('/chat', [ChatController::class, 'createOrGetOpenChat']);
+
+// Envia mensagem (com ou sem anexo)
+Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+
+// Retorna histórico de mensagens
+Route::get('/chat/{chatId}/messages', [ChatController::class, 'getMessages']);
+
+// Lista todos os chats (JSON) - para admin
+Route::get('/chats', [ChatController::class, 'getAllChats']);
+
+// Fecha chat
+Route::patch('/chat/{chatId}/close', [ChatController::class, 'closeChat']);
+
+// Histórico do usuário (opcional)
+Route::get('/meus-chats', [ChatController::class, 'meusChats'])->name('meus-chats');
+
+// Exibe um chat específico (opcional)
+Route::get('/chat/{chatId}', [ChatController::class, 'show'])->name('chat.show');
+
+// Lista todos os chats em uma view Blade (admin)
+Route::get('/admin/chats', [ChatController::class, 'listAllChats'])->name('admin.chats.index');
+
 require __DIR__.'/auth.php';

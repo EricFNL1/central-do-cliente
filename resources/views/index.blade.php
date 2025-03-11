@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Central do Cliente</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
@@ -614,32 +615,41 @@
 
 
 
-    <!-- Botão de Ajuda Flutuante -->
+<!-- Botão de Ajuda Flutuante (cliente) -->
 <div id="help-button" class="help-button">
   <i class="bi bi-chat-dots-fill"></i>
 </div>
 
 <!-- Container do Chat (inicialmente oculto) -->
-<div id="chat-container" class="chat-container d-none">
+<div id="chat-container" class="chat-container d-none" style="width: 400px;">
   <div class="chat-header">
-    <span>Como podemos ajudar?</span>
+    <span id="chat-title">Como podemos ajudar?</span>
     <button id="close-chat" class="close-btn">&times;</button>
   </div>
-  <div class="chat-body">
+  <div class="chat-body" id="chat-body" style="height: 300px; overflow-y: auto;">
     <p><strong>Point Assistente Virtual:</strong> Olá! Em que posso ajudar?</p>
   </div>
   <div class="chat-footer">
-    <input type="text" placeholder="Digite sua mensagem..." />
-    <button>Enviar</button>
+    <input type="text" id="chat-input" placeholder="Digite sua mensagem..." />
+    <input type="file" id="file-input" style="margin-right: 5px;" />
+    <button id="start-new-chat" type="button" style="display: none;">Novo Chat</button>
+    <button id="send-message" type="button">Enviar</button>
   </div>
 </div>
+
+
 
 
     <!-- Bootstrap core JS-->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     ></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
+<!-- Carrega o JS que configura o Echo (compilado pelo Vite/Mix) -->
+@vite(['resources/js/app.js', 'resources/css/app.css'])
+
+
+<!-- Depois, carrega o script do chat -->
+<script src="js/scripts.js"></script>
+
   </body>
 </html>
