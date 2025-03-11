@@ -213,7 +213,7 @@
   <!-- As duas primeiras linhas continuam dentro de um container-fluid p-0 -->
   <div class="row g-0">
   <!-- Lado esquerdo: imagem -->
-  <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('{{ asset('img/img3.png') }}');">
+  <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('{{ asset('img/1.png') }}');">
   </div>
   <!-- Lado direito: últimas solicitações -->
   <div class="col-lg-6 order-lg-1 my-auto showcase-text">
@@ -275,7 +275,7 @@
 <div class="row g-0">
   <!-- Lado esquerdo: imagem (similar a “Últimas Solicitações”) -->
   <div class="col-lg-6 text-white showcase-img" 
-       style="background-image: url('{{ asset('img/img2.png') }}');">
+       style="background-image: url('{{ asset('img/2.png') }}');">
   </div>
 
   <!-- Lado direito: bloco de texto e faturas, com mesma formatação -->
