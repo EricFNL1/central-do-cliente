@@ -212,84 +212,70 @@
 <!-- Image Showcases (mantido) -->
 <section class="showcase">
   <!-- As duas primeiras linhas continuam dentro de um container-fluid p-0 -->
-  <div class="row g-0">
-  <!-- Lado esquerdo: imagem -->
-  <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('{{ asset('img/1.png') }}');">
-  </div>
   <!-- Lado direito: últimas solicitações -->
+  <div class="row g-0">
+  <!-- Bloco de Solicitações -->
   <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-  <h2>Suas Últimas Solicitações</h2>
-  @php
-    // Busca as 3 últimas solicitações do usuário autenticado
-    $ultimasSolicitacoes = \App\Models\Solicitacao::where('user_id', Auth::id())
-                          ->latest()
-                          ->take(3)
-                          ->get();
-  @endphp
+    <h2>Suas Últimas Solicitações</h2>
+    @php
+      // Busca as 3 últimas solicitações do usuário autenticado
+      $ultimasSolicitacoes = \App\Models\Solicitacao::where('user_id', Auth::id())
+                            ->latest()
+                            ->take(3)
+                            ->get();
+    @endphp
 
-  @if($ultimasSolicitacoes->isEmpty())
-    <p class="lead mb-3">Você ainda não possui solicitações.</p>
-  @else
-    <ul class="list-group mb-3">
-      @foreach($ultimasSolicitacoes as $solicitacao)
-        <li class="list-group-item">
-          <strong>#{{ $solicitacao->id }}:</strong> {{ $solicitacao->assunto }}
-          <br>
-          @php
-  // Define a cor do badge conforme o status
-  $badgeClass = match($solicitacao->status) {
-    'aberto' => 'bg-danger',
-    'em-andamento' => 'bg-warning text-dark',
-    'finalizado' => 'bg-success',
-    default => 'bg-secondary',
-  };
-@endphp
+    @if($ultimasSolicitacoes->isEmpty())
+      <p class="lead mb-3">Você ainda não possui solicitações.</p>
+    @else
+      <ul class="list-group mb-3">
+        @foreach($ultimasSolicitacoes as $solicitacao)
+          <li class="list-group-item">
+            <strong>#{{ $solicitacao->id }}:</strong> {{ $solicitacao->assunto }}
+            <br>
+            @php
+              // Define a cor do badge conforme o status
+              $badgeClass = match($solicitacao->status) {
+                'aberto' => 'bg-danger',
+                'em-andamento' => 'bg-warning text-dark',
+                'finalizado' => 'bg-success',
+                default => 'bg-secondary',
+              };
+            @endphp
 
-<small class="text-muted">
-  Criada em: {{ $solicitacao->created_at->format('d/m/Y') }}
-  | Previsão de Entrega:
-  @if($solicitacao->previsao_entrega)
-    {{ $solicitacao->previsao_entrega->format('d/m/Y') }}
-  @else
-    Não definida
-  @endif
+            <small class="text-muted">
+              Criada em: {{ $solicitacao->created_at->format('d/m/Y') }}
+              | Previsão de Entrega:
+              @if($solicitacao->previsao_entrega)
+                {{ $solicitacao->previsao_entrega->format('d/m/Y') }}
+              @else
+                Não definida
+              @endif
+              | Status:
+              <span class="badge {{ $badgeClass }}">
+                {{ ucfirst($solicitacao->status) }}
+              </span>
+            </small>
+          </li>
+        @endforeach
+      </ul>
+    @endif
 
-  | Status:
-  <span class="badge {{ $badgeClass }}">
-    {{ ucfirst($solicitacao->status) }}
-  </span>
-</small>
-
-        </li>
-      @endforeach
-    </ul>
-  @endif
-
-  <a href="{{ route('solicitacoes.index') }}" class="btn">
-    Ver Solicitações →
-  </a>
-</div>
-</div>
-
-  <!-- Lado direito: últimas faturas com padding interno -->
-<!-- Linha para “Últimas Faturas” no mesmo padrão de “Últimas Solicitações” -->
-<div class="row g-0">
-  <!-- Lado esquerdo: imagem (similar a “Últimas Solicitações”) -->
-  <div class="col-lg-6 text-white showcase-img" 
-       style="background-image: url('{{ asset('img/2.png') }}');">
+    <a href="{{ route('solicitacoes.index') }}" class="btn">
+      Ver Solicitações →
+    </a>
   </div>
 
-  <!-- Lado direito: bloco de texto e faturas, com mesma formatação -->
- <div class="col-lg-6 my-auto showcase-text p-7">
+  <!-- Bloco de Faturas -->
+  <div class="col-lg-6 my-auto showcase-text p-7">
     <h2 class="mb-3">Últimas Faturas</h2>
-
     @php
       // Exemplo: pega as 3 faturas mais recentes da administradora do usuário
       $admId = Auth::user()->administradora_id;
       $ultimasFaturas = \App\Models\Fatura::where('administradora_id', $admId)
-                         ->orderBy('created_at', 'desc')
-                         ->take(3)
-                         ->get();
+                        ->orderBy('created_at', 'desc')
+                        ->take(3)
+                        ->get();
     @endphp
 
     @if($ultimasFaturas->isEmpty())
@@ -297,7 +283,6 @@
     @else
       <ul class="list-group mb-3">
         @foreach($ultimasFaturas as $fatura)
-
           @php
             // Define a cor do badge conforme o status
             $badgeClass = match($fatura->status) {
@@ -311,12 +296,9 @@
           <li class="list-group-item">
             <strong>#{{ $fatura->id }}:</strong>
             R$ {{ number_format($fatura->valor, 2, ',', '.') }}
-
-            <!-- Status como badge colorido -->
             <span class="badge {{ $badgeClass }}">
               {{ ucfirst($fatura->status) }}
             </span>
-
             <br>
             <small class="text-muted">
               Emissão:
@@ -325,7 +307,6 @@
               @else
                 ---
               @endif
-
               | Vencimento:
               @if($fatura->data_vencimento)
                 {{ $fatura->data_vencimento->format('d/m/Y') }}
@@ -338,14 +319,12 @@
       </ul>
     @endif
 
-    <!-- Botão ou link de navegação, como no “Últimas Solicitações” -->
     <a href="{{ route('financeiro') }}" class="btn">
       Ver Faturas →
     </a>
   </div>
 </div>
 
-</div>
 
 
 
