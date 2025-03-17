@@ -13,30 +13,25 @@
   <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
   <link rel="stylesheet" href="{{ asset('css/point.css') }}">
 </head>
-<!-- Layout flex: corpo ocupa 100% da altura da viewport e organiza em coluna -->
 <body class="d-flex flex-column min-vh-100">
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg themepoint static-top">
     <div class="container-fluid">
-      <!-- Logo / Marca -->
       <a class="navbar-brand" href="{{ route('index') }}">
         <img src="{{ asset('img/Pointcentral.png') }}" alt="Logo" width="120" />
       </a>
-      <!-- Botão 'hamburguer' -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
-      <!-- Itens do menu -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link" href="{{ route('index') }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('solicitacao') }}">Minhas solicitações</a>
+            <a class="nav-link" href="{{ route('solicitacoes.index') }}">Minhas solicitações</a>
           </li>
           <li class="nav-item">
             <a class="nav-link isticked" href="{{ route('financeiro') }}">Financeiro</a>
@@ -48,58 +43,67 @@
             <a class="nav-link" href="{{ route('index') }}#faq">FAQ</a>
           </li>
         </ul>
-        <!-- Botões à direita -->
         <div class="d-flex align-items-center">
-      @auth
-    <div class="dropdown me-2">
-      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-         data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
-      </a>
-      <ul class="dropdown-menu" aria-labelledby="userDropdown">
-        {{-- Se for admin, exibe o link para a rota admin --}}
-        @if (Auth::user()->categoria === 'admin')
-          <li>
-            <a class="dropdown-item" href="{{ route('admin.panel') }}">
-              <i class="bi bi-gear me-1"></i> Admin
-            </a>
-          </li>
-        @endif
-
-        <li>
-          <a class="dropdown-item" href="{{ route('profile.edit') }}">
-            <i class="bi bi-person-badge me-1"></i> Editar Perfil
+          @auth
+            <div class="dropdown me-2">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                @if (Auth::user()->categoria === 'admin')
+                  <li>
+                    <a class="dropdown-item" href="{{ route('admin.panel') }}">
+                      <i class="bi bi-gear me-1"></i> Admin
+                    </a>
+                  </li>
+                @endif
+                <li>
+                  <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                    <i class="bi bi-person-badge me-1"></i> Editar Perfil
+                  </a>
+                </li>
+                <li>
+                  <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="dropdown-item">
+                      <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          @endauth
+          <a class="btn btn-secondary me-2" href="https://pointcondominio.com.br/administradora">
+            <i class="bi bi-arrow-left-circle me-1"></i>Voltar para o Sistema
           </a>
-        </li>
-        <li>
-          <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="dropdown-item">
-              <i class="bi bi-box-arrow-right me-1"></i> Logout
-            </button>
-          </form>
-        </li>
-      </ul>
-    </div>
-  @endauth
-
-  <a class="btn btn-secondary me-2" href="https://pointcondominio.com.br/administradora">
-    <i class="bi bi-arrow-left-circle me-1"></i>Voltar para o Sistema
-  </a>
-</div>
+        </div>
       </div>
     </div>
   </nav>
 
-  <!-- Conteúdo Principal dentro de <main class="flex-grow-1"> -->
+  <!-- Conteúdo Principal -->
   <main class="flex-grow-1">
     <div class="container my-5">
       <h1 class="mb-4">Painel Financeiro</h1>
 
-      <!-- Seção de Resumo Financeiro -->
+      <!-- Layout com cards empilhados e gráfico ao lado -->
       <div class="row mb-4">
+           <!-- Coluna com o gráfico -->
+           <div class="col-md-8">
+          <div class="card">
+            <div class="card-body">
+              <h2>Visão Gráfica</h2>
+              <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="financeChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Coluna com cards empilhados -->
         <div class="col-md-4">
-          <div class="card text-center">
+          <!-- Valor em Aberto -->
+          <div class="card mb-3 text-center">
             <div class="card-body">
               <h5 class="card-title">Valor em Aberto</h5>
               <p class="card-text display-6">
@@ -107,17 +111,15 @@
               </p>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card text-center">
+          <!-- Faturas Pendentes -->
+          <div class="card mb-3 text-center">
             <div class="card-body">
               <h5 class="card-title">Faturas Pendentes</h5>
               <p class="card-text display-6">{{ $faturasPendentes }}</p>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card text-center">
+          <!-- Últimas Transações -->
+          <div class="card mb-3 text-center">
             <div class="card-body">
               <h5 class="card-title">Últimas Transações</h5>
               <p class="card-text display-6">
@@ -132,56 +134,10 @@
         </div>
       </div>
 
-      <!-- Tabela de Histórico de Transações -->
-      <div class="card mb-5">
-        <div class="card-header">
-          Histórico de Transações
-        </div>
-        <div class="card-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse($historico as $transacao)
-                <tr>
-                  <td>{{ optional($transacao->data_transacao)->format('d/m/Y') ?? '---' }}</td>
-                  <td>{{ $transacao->descricao }}</td>
-                  <td>
-                    @if($transacao->tipo == 'debito')
-                      - R$ {{ number_format($transacao->valor, 2, ',', '.') }}
-                    @else
-                      + R$ {{ number_format($transacao->valor, 2, ',', '.') }}
-                    @endif
-                  </td>
-                  <td>{{ ucfirst($transacao->status) }}</td>
-                </tr>
-              @empty
-                <tr>
-                  <td colspan="4">Nenhuma transação registrada.</td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
-          <!-- Paginação do histórico (caso use paginate()) -->
-          @if($historico->hasPages())
-            <div class="d-flex justify-content-center">
-              {{ $historico->links() }}
-            </div>
-          @endif
-        </div>
-      </div>
-
-      <!-- Seção para Pagamento de Faturas (tabela com opção de pagar) -->
+      <!-- Seção para Pagamento de Faturas -->
       <div class="mb-5">
         <h2>Pagar Fatura</h2>
         @php
-          // Filtra apenas as faturas pendentes da administradora do usuário logado
           $admId = Auth::user()->administradora_id;
           $faturasPendentesList = \App\Models\Fatura::where('administradora_id', $admId)
                                   ->where('status', 'pendente')
@@ -210,7 +166,6 @@
                   <td>R$ {{ number_format($fatura->valor, 2, ',', '.') }}</td>
                   <td>{{ $fatura->data_vencimento->format('d/m/Y') }}</td>
                   <td>
-                    <!-- Formulário para pagar a fatura -->
                     <form action="{{ route('financeiro.pagar') }}" method="POST" class="form-pagar">
                       @csrf
                       <input type="hidden" name="fatura_id" value="{{ $fatura->id }}">
@@ -225,14 +180,6 @@
         @endif
       </div>
 
-      <!-- Dashboard Financeiro com Gráfico de Pizza -->
-      <div class="mb-5">
-        <h2>Dashboard Financeiro</h2>
-        <div style="position: relative; height: 300px; width: 100%;">
-          <canvas id="financeChart"></canvas>
-        </div>
-      </div>
-      
       <!-- Lista de Faturas do Usuário -->
       <div class="card mb-5">
         <div class="card-header">
@@ -275,7 +222,6 @@
               @endforelse
             </tbody>
           </table>
-          <!-- Paginação das faturas, se usar paginate() -->
           @if($faturas->hasPages())
             <div class="d-flex justify-content-center">
               {{ $faturas->links() }}
@@ -287,35 +233,78 @@
   </main>
 
   <!-- Footer -->
-  <footer class="footer bg-light mt-auto">
+  <footer class="pt-5 pb-4" style="background-color: #2e2e2e; color: #fff;">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
-          <ul class="list-inline mb-2">
-            <li class="list-inline-item"><a href="#!">About</a></li>
-            <li class="list-inline-item">⋅</li>
-            <li class="list-inline-item"><a href="#!">Contact</a></li>
-            <li class="list-inline-item">⋅</li>
-            <li class="list-inline-item"><a href="#!">Terms of Use</a></li>
-            <li class="list-inline-item">⋅</li>
-            <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
-          </ul>
-          <p class="text-muted small mb-4 mb-lg-0">
-            &copy; Point Network 2025. All Rights Reserved.
-          </p>
+      <div class="row align-items-start gy-4">
+        <div class="col-12 col-md-3">
+          <div class="d-flex align-items-start">
+            <img src="{{ asset('img/icone-negativo.png') }}" alt="Point Network Logo"
+                 style="height: 40px; width: auto; margin-right: 1rem; margin-top: -1px;">
+            <div style="line-height: 1.6;">
+              Rua Terez de Indaiá, 225 - Centro<br />
+              Mogi Mirim - SP<br />
+              CEP: 13800-351
+              <div class="mt-2">
+                <p class="mb-0">contato@pointnetwork.com.br</p>
+                <p class="mb-0">(19) 3800-0000</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
-          <ul class="list-inline mb-0">
-            <li class="list-inline-item me-4">
-              <a href="https://www.facebook.com/pointcondominio"><i class="bi-facebook fs-3"></i></a>
+        <div class="col-6 col-md-2">
+          <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">Institucional</h6>
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Sobre nós</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Termos de uso</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Política de privacidade</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Contato</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2">
+          <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">Produtos</h6>
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Point Condomínio</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Point SaaS</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Point ID</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">Serviços</h6>
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Cobrança digital</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Boleto digital</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Receber em cartão de crédito</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Parking</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Seguro condominial</a></li>
+            <li class="mb-2"><a href="#!" style="color: #fff; text-decoration: none;">Crédito para condomínio</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-2 text-md-start text-lg-end">
+          <h6 class="fw-bold mb-3" style="text-transform: uppercase; font-size: 0.9rem;">Redes-Sociais</h6>
+          <ul class="list-inline">
+            <li class="list-inline-item me-3">
+              <a href="https://www.facebook.com/pointcondominio" style="color: #fff;">
+                <i class="bi-facebook fs-5"></i>
+              </a>
             </li>
-            <li class="list-inline-item me-4">
-              <a href="https://x.com/pointcondominio"><i class="bi-twitter fs-3"></i></a>
+            <li class="list-inline-item me-3">
+              <a href="https://x.com/pointcondominio" style="color: #fff;">
+                <i class="bi-twitter fs-5"></i>
+              </a>
             </li>
             <li class="list-inline-item">
-              <a href="https://www.instagram.com/point.condominio/"><i class="bi-instagram fs-3"></i></a>
+              <a href="https://www.instagram.com/point.condominio/" style="color: #fff;">
+                <i class="bi-instagram fs-5"></i>
+              </a>
             </li>
           </ul>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <p class="mb-0 small text-center text-md-start" style="opacity: 0.8;">
+            &copy; 2025 Point Network. Todos os direitos reservados.
+          </p>
         </div>
       </div>
     </div>
@@ -359,17 +348,13 @@
       }
     });
   </script>
-
-  <!-- SweetAlert2 (para confirmação de pagamento) -->
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    // Seleciona todos os formulários com a classe "form-pagar"
     const forms = document.querySelectorAll('.form-pagar');
-
     forms.forEach(form => {
       form.addEventListener('submit', function(e) {
-        e.preventDefault(); // Impede o envio imediato
-
+        e.preventDefault();
         Swal.fire({
           title: 'Confirmar Pagamento',
           text: "Deseja realmente pagar essa fatura?",

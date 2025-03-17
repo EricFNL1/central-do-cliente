@@ -10837,11 +10837,27 @@ textarea.form-control-lg {
 .features-icons .features-icons-item .features-icons-icon i {
   font-size: 4.5rem;
 }
+@media (max-width: 1366px) {
+  header.masthead .container > div[style*="top:30%"] {
+    left: 5% !important;
+    top: 25% !important;
+  }
+
+  header.masthead .container > div[style*="top:100%"] {
+    left: 10% !important;
+    top: 85% !important;
+  }
+
+  header.masthead .container > div[style*="top:-80%"] {
+    left: 20% !important;
+    top: 5% !important;
+  }
+}
 
 header.masthead {
   position: relative;
   background-color: #343a40;
-  background: url("../img/pointbanner.png") no-repeat center center;
+  background: url("../img/bannerfundo.png") no-repeat center center;
   background-size: cover;
   padding-top: 8rem;
   padding-bottom: 8rem;

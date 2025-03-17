@@ -47,12 +47,20 @@
       font-size: 1rem;
       line-height: 1.4;
     }
+    .img-shadow {
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.86));
+    transition: filter 0.3s ease;
+    }
+
+    .img-shadow:hover {
+    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.84));
+    }
 
     /* Área do formulário de login (cartão) */
     .login-area {
       width: 100%;
-      max-width: 400px; /* Largura máxima do form */
-      background-color: #fff;
+      max-width: 500px; /* Largura máxima do form */
+      background-color: rgba(255, 255, 255, 0.85);
       margin: 10rem; /* espaço entre borda e cartão */
       border-radius: 8px;
       padding: 2rem;
@@ -174,6 +182,24 @@
             </a>
           @endif
         </div>
+
+        <div class="mt-3 text-center">
+          Nossos Produtos
+        </div>
+        <div class="mt-4">
+    <div class="d-flex align-items-center justify-content-center">
+        <a href="https://www.pointcondominio.com.br/">
+            <img class="img-shadow" src="img/PCondominio2.png" alt="Point Condomínio" width="200px">
+        </a>
+        <a href="https://www.pointid.com.br/">
+            <img class="img-shadow" src="img/PointID.png" alt="Point ID" width="120px">
+        </a>
+        <a href="https://pointsaas.com.br/">
+            <img class="img-shadow" src="img/PointSaas.png" alt="Point SaaS" width="140px">
+        </a>
+    </div>
+</div>
+
       </form>
     </div> <!-- .login-area -->
   </div> <!-- .login-wrapper -->

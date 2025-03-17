@@ -22,15 +22,16 @@
       type="text/css"
     />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/point.css">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/point.css') }}">
   </head>
   <body>
   <nav class="navbar navbar-expand-lg themepoint static-top">
   <div class="container-fluid">
     <!-- Logo / Marca -->
     <a class="navbar-brand" href="#!">
-      <img src="img/Pointcentral.png" alt="Logo" width="120" />
+    <img src="{{ asset('img/Pointcentral.png') }}" alt="Logo" width="120" style="margin-top: 8px;">
+
     </a>
 
     <!-- Botão 'hamburguer' para telas pequenas -->
@@ -123,35 +124,25 @@
 </nav>
     
 
-    <!-- Masthead (agora com barra de pesquisa) -->
-    <header class="masthead" id="barra-pesquisa">
+<header class="masthead" id="barra-pesquisa">
+  <!-- Vídeo no fundo -->
+  <video autoplay muted loop style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1;">
+    <source src="{{ asset('img/Vídeo.mp4') }}" type="video/mp4">
+    Seu navegador não suporta vídeos.
+  </video>
+
   <div class="container position-relative">
     <div class="row justify-content-center">
       <div class="col-xl-6">
         <div class="text-center text-white">
-          <!-- Título da página -->
           <h1 class="mb-5">Encontre o que você precisa!</h1>
-          <!-- Formulário de pesquisa -->
-          {{-- Ajuste a action para a rota de busca e o método para GET --}}
           <form class="form-subscribe" id="searchForm" action="{{ route('faqs.search') }}" method="GET">
             <div class="row">
               <div class="col">
-                <input
-                  class="form-control form-control-lg"
-                  id="searchInput"
-                  type="text"
-                  name="query"
-                  placeholder="Digite sua pesquisa..."
-                />
+                <input class="form-control form-control-lg" id="searchInput" type="text" name="query" placeholder="Digite sua pesquisa..." />
               </div>
               <div class="col-auto">
-                <button
-                  class="btn btn-primary btn-lg"
-                  id="searchButton"
-                  type="submit"
-                >
-                  Pesquisar
-                </button>
+                <button class="btn btn-primary btn-lg" id="searchButton" type="submit">Pesquisar</button>
               </div>
             </div>
           </form>
@@ -161,8 +152,27 @@
         </div>
       </div>
     </div>
+
+    <!-- Comentários Flutuantes Centralizados no P -->
+    <div style="position:absolute; top:30%; left:-13%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+      <span style="color:#6a5acd; font-weight:bold;">Solicitações</span><br>
+      Faça sua solicitação
+    </div>
+
+    <div style="position:absolute; top:100%; left:7%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+      <span style="color:#ff8c00; font-weight:bold;">FAQs</span><br>
+      Tire suas dúvidas
+    </div>
+
+    <div style="position:absolute; top:-80%; left:15%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+      <span style="color:#32cd32; font-weight:bold;">Faturas</span><br>
+      Pegue suas faturas
+    </div>
+
   </div>
 </header>
+
+
 
     <!-- Icons Grid (mantido) -->
     <section class="features-icons bg-light text-center">
@@ -468,7 +478,7 @@
         <div class="d-flex align-items-start">
   <!-- Logo -->
   <img
-    src="img/icone-negativo.png"
+    src="{{ asset('img/icone-negativo.png') }}"
     alt="Point Network Logo"
     style="
       height: 40px; 
