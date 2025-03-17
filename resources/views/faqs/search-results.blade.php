@@ -22,7 +22,7 @@
     <div class="container-fluid">
       <!-- Logo / Marca -->
       <a class="navbar-brand" href="{{ route('index') }}">
-        <img src="{{ asset('img/Pointcentral.png') }}" alt="Logo" width="120" />
+      <img src="{{ asset('img/Pointcentral.png') }}" alt="Logo" width="120" style="margin-top: 8px;">
       </a>
       <!-- Botão 'hamburguer' para telas pequenas -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"

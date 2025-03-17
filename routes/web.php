@@ -18,9 +18,12 @@ use App\Http\Controllers\AdminJourneyController;
 use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\AdminFinanceiroController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AcademiaController;
 
 
 
+Route::get('/academia', [AcademiaController::class, 'index'])->name('academia');
+Route::get('/treinamentos', [AcademiaController::class, 'index'])->name('treinamentos.index');
 
 
 // Rota raiz que exibe a tela de login (para usuários não autenticados)
