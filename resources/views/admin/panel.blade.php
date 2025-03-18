@@ -48,6 +48,7 @@
             <li><a href="{{ route('admin.journeys.index') }}">Gerenciar Jornada</a></li>
             <li><a href="{{ route('admin.faqs.index') }}">Gerenciar FAQs</a></li>
             <li><a href="{{ route('admin.financeiro.index') }}">Financeiro (Admin)</a></li>
+            <li><a href="{{ route('admin.academia.index') }}">Treinamentos (Admin)</a></li>
             <li><a href="{{ route('index') }}">Voltar</a></li>
         </ul>
 

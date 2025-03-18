@@ -98,34 +98,97 @@
       </div>
     </header>
 
-    <!-- Seção de Treinamentos -->
+    <!-- Seção de Treinamentos com Categorias -->
     <section class="features-icons bg-light text-center" id="treinamentos">
       <div class="container">
-      <h1 class="mb-5">Encontre o que você precisa!</h1>
-          <form class="form-subscribe mb-5" id="searchForm" action="{{ route('faqs.search') }}" method="GET">
-            <div class="row">
-              <div class="col">
-                <input class="form-control form-control-lg" id="searchInput" type="text" name="query" placeholder="Digite sua pesquisa..." />
-              </div>
-              <div class="col-auto">
-                <button class="btn  btn-lg" id="searchButton" type="submit">Pesquisar</button>
-              </div>
+        <h1 class="mb-5">Encontre o que você precisa!</h1>
+        <form class="form-subscribe mb-5" id="searchForm" action="{{ route('faqs.search') }}" method="GET">
+          <div class="row">
+            <div class="col">
+              <input class="form-control form-control-lg" id="searchInput" type="text" name="query" placeholder="Digite sua pesquisa..." />
             </div>
-          </form>
+            <div class="col-auto">
+              <button class="btn btn-lg" id="searchButton" type="submit">Pesquisar</button>
+            </div>
+          </div>
+        </form>
         <h2 class="mb-5">Nossos Treinamentos</h2>
         <div class="row">
-          @forelse($treinamentos as $treinamento)
+          @forelse($categorias as $categoria)
             <div class="col-lg-4">
               <div class="card mb-4">
+                @if($categoria->imagem)
+                  <img src="{{ asset('storage/' . $categoria->imagem) }}" alt="{{ $categoria->nome }}" class="card-img-top">
+                  <!-- Se preferir usar Storage::url(), descomente a linha abaixo e comente a anterior -->
+                  <!-- <img src="{{ Storage::url($categoria->imagem) }}" alt="{{ $categoria->nome }}" class="card-img-top"> -->
+                @else
+                  <img src="{{ asset('img/placeholder.png') }}" alt="Sem imagem" class="card-img-top">
+                @endif
+
                 <div class="card-body">
-                  <h3 class="card-title">{{ $treinamento['titulo'] }}</h3>
-                  <p class="card-text">{{ $treinamento['descricao'] }}</p>
-                  <a href="{{ $treinamento['link'] }}" class="btn">Acessar Treinamento</a>
+                  <h3 class="card-title">{{ $categoria->nome }}</h3>
+
+                  <!-- Botão para abrir/fechar o bloco de treinamentos -->
+                  <button class="btn  mb-3" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseCategoria-{{ $categoria->id }}"
+                          aria-expanded="false"
+                          aria-controls="collapseCategoria-{{ $categoria->id }}">
+                    Ver Treinamentos
+                  </button>
+
+                  <!-- Conteúdo que expande/recolhe -->
+                  <div class="collapse" id="collapseCategoria-{{ $categoria->id }}">
+                    @if($categoria->treinamentos->count() > 0)
+                      <!-- Se quiser exibir cada treinamento em um Accordion separado: -->
+                      <div class="accordion" id="accordionCategoria-{{ $categoria->id }}">
+                        @foreach($categoria->treinamentos as $index => $treinamento)
+                          <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-{{ $categoria->id }}-{{ $index }}">
+                              <button class="accordion-button collapsed" type="button"
+                                      data-bs-toggle="collapse"
+                                      data-bs-target="#collapse-{{ $categoria->id }}-{{ $index }}"
+                                      aria-expanded="false"
+                                      aria-controls="collapse-{{ $categoria->id }}-{{ $index }}">
+                                {{ $treinamento->titulo }}
+                              </button>
+                            </h2>
+                            <div id="collapse-{{ $categoria->id }}-{{ $index }}"
+                                 class="accordion-collapse collapse"
+                                 aria-labelledby="heading-{{ $categoria->id }}-{{ $index }}"
+                                 data-bs-parent="#accordionCategoria-{{ $categoria->id }}">
+                              <div class="accordion-body" style="max-height: 200px; overflow-y: auto;">
+                                <p>{{ $treinamento->descricao }}</p>
+                                @if($treinamento->link)
+                                  <a href="{{ $treinamento->link }}" class="btn btn-sm" target="_blank">Acessar Treinamento</a>
+                                @endif
+                              </div>
+                            </div>
+                          </div>
+                        @endforeach
+                      </div>
+
+                      <!-- Se preferir uma listagem simples, sem accordion:
+                      @foreach($categoria->treinamentos as $treinamento)
+                        <div class="text-start mb-2">
+                          <h5>{{ $treinamento->titulo }}</h5>
+                          <p>{{ $treinamento->descricao }}</p>
+                          @if($treinamento->link)
+                            <a href="{{ $treinamento->link }}" class="btn btn-primary btn-sm" target="_blank">Acessar Treinamento</a>
+                          @endif
+                        </div>
+                      @endforeach
+                      -->
+                    @else
+                      <p>Nenhum treinamento disponível nesta categoria.</p>
+                    @endif
+                  </div>
+                  <!-- Fim do bloco collapse -->
                 </div>
               </div>
             </div>
           @empty
-            <p class="lead">Nenhum treinamento disponível no momento.</p>
+            <p class="lead">Nenhuma categoria com treinamentos disponível no momento.</p>
           @endforelse
         </div>
       </div>

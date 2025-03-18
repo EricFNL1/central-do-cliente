@@ -20,8 +20,35 @@ use App\Http\Controllers\AdminFinanceiroController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AcademiaController;
 use App\Http\Controllers\ProdutosController;
+use App\Http\Controllers\AdminAcademiaController;
+use App\Http\Controllers\CategoriaController;
 
 
+Route::prefix('admin')->group(function () {
+    // Exibe o formulário de cadastro de categoria
+    Route::get('/categorias/create', [CategoriaController::class, 'create'])->name('admin.categorias.create');
+    
+    // Processa o cadastro da categoria
+    Route::post('/categorias', [CategoriaController::class, 'store'])->name('admin.categorias.store');
+});
+
+
+Route::prefix('admin')->group(function () {
+    // Listagem + Formulário de cadastro
+    Route::get('/academia', [AdminAcademiaController::class, 'index'])->name('admin.academia.index');
+
+    // Inserir (POST)
+    Route::post('/academia', [AdminAcademiaController::class, 'store'])->name('admin.academia.store');
+
+    // Editar (GET) - carrega formulário de edição
+    Route::get('/academia/edit/{id}', [AdminAcademiaController::class, 'edit'])->name('admin.academia.edit');
+
+    // Atualizar (PUT)
+    Route::put('/academia/{id}', [AdminAcademiaController::class, 'update'])->name('admin.academia.update');
+
+    // Excluir (DELETE)
+    Route::delete('/academia/{id}', [AdminAcademiaController::class, 'destroy'])->name('admin.academia.destroy');
+});
 
 
 Route::get('/produtos', [ProdutosController::class, 'index'])->name('produtos'); 

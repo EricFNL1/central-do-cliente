@@ -3,25 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Categoria;
+use App\Models\Treinamento;
 
 class AcademiaController extends Controller
 {
+ 
+
     public function index()
-    { // Exemplo de dados estáticos (substitua por busca no banco, se necessário)
-        $treinamentos = [
-            [
-                'titulo' => 'Treinamento Contas',
-                'descricao' => 'Aprenda os fundamentos do financeiro.',
-                'link' => '#'
-            ],
-            [
-                'titulo' => 'Treinamento Avançado de Pagamentos',
-                'descricao' => 'Aprofunde seus conhecimentos em Pagamentos.',
-                'link' => '#'
-            ],
-        ];
+    {
+        // Carrega todas as categorias com os treinamentos relacionados
+        $categorias = Categoria::with('treinamentos')->get();
     
-        // Retorna a view passando a variável
-        return view('academia', compact('treinamentos'));  
+        return view('academia', compact('categorias'));
     }
+    
 }
