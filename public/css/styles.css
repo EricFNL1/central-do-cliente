@@ -10885,6 +10885,17 @@ header.masthead h1, header.masthead .h1 {
   }
 }
 
+header.masthead2 {
+  position: relative;
+  background-color: #343a40;
+  background: url("../img/library-with-books.jpg") no-repeat center center;
+  background-size: cover;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+  
+}
+
+
 .showcase .showcase-text {
   padding: 3rem;
 }

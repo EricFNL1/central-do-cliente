@@ -67,7 +67,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#jornada-aprendizado">
+          <a class="nav-link" href="{{route('academia')}}">
             Aprendizado
           </a>
         </li>

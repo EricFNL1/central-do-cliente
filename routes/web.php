@@ -19,9 +19,12 @@ use App\Http\Controllers\FinanceiroController;
 use App\Http\Controllers\AdminFinanceiroController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AcademiaController;
+use App\Http\Controllers\ProdutosController;
 
 
 
+
+Route::get('/produtos', [ProdutosController::class, 'index'])->name('produtos'); 
 Route::get('/academia', [AcademiaController::class, 'index'])->name('academia');
 Route::get('/treinamentos', [AcademiaController::class, 'index'])->name('treinamentos.index');
 

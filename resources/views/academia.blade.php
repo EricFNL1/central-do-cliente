@@ -38,7 +38,7 @@
               <a class="nav-link" href="{{ route('financeiro') }}">Financeiro</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="">Treinamentos</a>
+              <a class="nav-link isticked" href="">Treinamentos</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#faq">FAQ</a>
@@ -85,11 +85,7 @@
     </nav>
 
     <!-- Cabeçalho com vídeo de fundo -->
-    <header class="masthead" id="barra-pesquisa">
-      <video autoplay muted loop style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1;">
-        <source src="{{ asset('img/Vídeo.mp4') }}" type="video/mp4">
-        Seu navegador não suporta vídeos.
-      </video>
+    <header class="masthead2" id="barra-pesquisa">
       <div class="container position-relative">
         <div class="row justify-content-center">
           <div class="col-xl-6">
@@ -105,15 +101,26 @@
     <!-- Seção de Treinamentos -->
     <section class="features-icons bg-light text-center" id="treinamentos">
       <div class="container">
+      <h1 class="mb-5">Encontre o que você precisa!</h1>
+          <form class="form-subscribe mb-5" id="searchForm" action="{{ route('faqs.search') }}" method="GET">
+            <div class="row">
+              <div class="col">
+                <input class="form-control form-control-lg" id="searchInput" type="text" name="query" placeholder="Digite sua pesquisa..." />
+              </div>
+              <div class="col-auto">
+                <button class="btn  btn-lg" id="searchButton" type="submit">Pesquisar</button>
+              </div>
+            </div>
+          </form>
         <h2 class="mb-5">Nossos Treinamentos</h2>
         <div class="row">
-         // @forelse($treinamentos as $treinamento)
+          @forelse($treinamentos as $treinamento)
             <div class="col-lg-4">
               <div class="card mb-4">
                 <div class="card-body">
                   <h3 class="card-title">{{ $treinamento['titulo'] }}</h3>
                   <p class="card-text">{{ $treinamento['descricao'] }}</p>
-                  <a href="{{ $treinamento['link'] }}" class="btn btn-primary">Acessar Treinamento</a>
+                  <a href="{{ $treinamento['link'] }}" class="btn">Acessar Treinamento</a>
                 </div>
               </div>
             </div>

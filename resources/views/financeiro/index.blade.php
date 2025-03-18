@@ -37,7 +37,7 @@
             <a class="nav-link isticked" href="{{ route('financeiro') }}">Financeiro</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('index') }}#jornada-aprendizado">Aprendizado</a>
+            <a class="nav-link" href="{{ route('academia') }}">Aprendizado</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ route('index') }}#faq">FAQ</a>

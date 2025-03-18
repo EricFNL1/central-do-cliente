@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <title>Login - PointCondominio</title>
+  <title>Login - PointCentral</title>
   <!-- Responsividade -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Bootstrap (CDN) -->
@@ -48,13 +48,16 @@
       font-size: 1rem;
       line-height: 1.4;
     }
-    .img-shadow {
-    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.86));
-    transition: filter 0.3s ease;
+    .pcond {
+    color: #22bbd9
     }
 
-    .img-shadow:hover {
-    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.84));
+    .pointid {
+      color:rgb(88, 202, 132)
+    }
+
+    .pointsaas{
+      color:rgb(243, 140, 22)
     }
 
     /* Área do formulário de login (cartão) */
@@ -189,15 +192,21 @@
         </div>
         <div class="mt-4">
     <div class="d-flex align-items-center justify-content-center">
-        <a href="https://www.pointcondominio.com.br/">
-            <img class="img-shadow" src="img/PCondominio2.png" alt="Point Condomínio" width="200px">
+      <div class="container">
+        <a href="{{route('produtos')}}" target="_blank">
+           <p class="text-black">Point<span class="pcond">Condominio</span></p>
         </a>
-        <a href="https://www.pointid.com.br/">
-            <img class="img-shadow" src="img/PointID.png" alt="Point ID" width="120px">
+        </div>
+        <div class="container text-center">
+        <a href="{{route('produtos')}}" target="_blank">
+            <p class="text-black">Point<span class="pointid">ID</span></p>
         </a>
-        <a href="https://pointsaas.com.br/">
-            <img class="img-shadow" src="img/PointSaas.png" alt="Point SaaS" width="140px">
+        </div>
+        <div class="container">
+        <a href="{{route('produtos')}}" target="_blank" >
+            <p class="text-black">Point<span class="pointsaas">SaaS</span></p>
         </a>
+        </div>
     </div>
 </div>
 
