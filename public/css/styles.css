@@ -10862,16 +10862,17 @@ header.masthead {
   padding-top: 8rem;
   padding-bottom: 8rem;
 }
-header.masthead:before {
-  content: "";
-  position: absolute;
-  background-color: #1c375e;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  opacity: 0.5;
+
+.ComentarioFlutuante{
+  color: black;
 }
+
+@media (max-width: 1393px){
+  .ComentarioFlutuante{
+    display: none;
+  }
+}
+
 header.masthead h1, header.masthead .h1 {
   font-size: 2rem;
 }

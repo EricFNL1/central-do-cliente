@@ -18,4 +18,10 @@ class Treinamento extends Model
 {
     return $this->belongsTo(Categoria::class, 'categoria_id');
 }
+
+
+public function progressos()
+{
+    return $this->hasMany(TreinamentoProgress::class);
+}
 }

@@ -22,6 +22,7 @@ use App\Http\Controllers\AcademiaController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\AdminAcademiaController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\Admin\TreinamentoController;
 
 
 Route::prefix('admin')->group(function () {
@@ -32,6 +33,9 @@ Route::prefix('admin')->group(function () {
     Route::post('/categorias', [CategoriaController::class, 'store'])->name('admin.categorias.store');
 });
 
+Route::prefix('admin')->group(function () {
+    Route::resource('treinamentos', \App\Http\Controllers\Admin\TreinamentoController::class);
+});
 
 Route::prefix('admin')->group(function () {
     // Listagem + Formulário de cadastro
@@ -53,6 +57,7 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/produtos', [ProdutosController::class, 'index'])->name('produtos'); 
 Route::get('/academia', [AcademiaController::class, 'index'])->name('academia');
+Route::post('/academia/progress', [AcademiaController::class, 'updateProgress'])->name('academia.updateProgress');
 Route::get('/treinamentos', [AcademiaController::class, 'index'])->name('treinamentos.index');
 
 

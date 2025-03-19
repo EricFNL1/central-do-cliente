@@ -119,8 +119,6 @@
               <div class="card mb-4">
                 @if($categoria->imagem)
                   <img src="{{ asset('storage/' . $categoria->imagem) }}" alt="{{ $categoria->nome }}" class="card-img-top">
-                  <!-- Se preferir usar Storage::url(), descomente a linha abaixo e comente a anterior -->
-                  <!-- <img src="{{ Storage::url($categoria->imagem) }}" alt="{{ $categoria->nome }}" class="card-img-top"> -->
                 @else
                   <img src="{{ asset('img/placeholder.png') }}" alt="Sem imagem" class="card-img-top">
                 @endif
@@ -129,7 +127,7 @@
                   <h3 class="card-title">{{ $categoria->nome }}</h3>
 
                   <!-- Botão para abrir/fechar o bloco de treinamentos -->
-                  <button class="btn  mb-3" type="button"
+                  <button class="btn mb-3" type="button"
                           data-bs-toggle="collapse"
                           data-bs-target="#collapseCategoria-{{ $categoria->id }}"
                           aria-expanded="false"
@@ -137,10 +135,9 @@
                     Ver Treinamentos
                   </button>
 
-                  <!-- Conteúdo que expande/recolhe -->
+                  <!-- Bloco collapse com os treinamentos -->
                   <div class="collapse" id="collapseCategoria-{{ $categoria->id }}">
                     @if($categoria->treinamentos->count() > 0)
-                      <!-- Se quiser exibir cada treinamento em um Accordion separado: -->
                       <div class="accordion" id="accordionCategoria-{{ $categoria->id }}">
                         @foreach($categoria->treinamentos as $index => $treinamento)
                           <div class="accordion-item">
@@ -159,6 +156,17 @@
                                  data-bs-parent="#accordionCategoria-{{ $categoria->id }}">
                               <div class="accordion-body" style="max-height: 200px; overflow-y: auto;">
                                 <p>{{ $treinamento->descricao }}</p>
+                                
+                                <!-- Exibe a barra de progresso para o treinamento -->
+                                @php
+                                  $progresso = $progressos->has($treinamento->id) ? $progressos[$treinamento->id]->progresso : 0;
+                                @endphp
+                                <div class="progress mb-2" style="height: 20px;">
+                                  <div class="progress-bar" role="progressbar" style="width: {{ $progresso }}%;" aria-valuenow="{{ $progresso }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ $progresso }}%
+                                  </div>
+                                </div>
+                                
                                 @if($treinamento->link)
                                   <a href="{{ $treinamento->link }}" class="btn btn-sm" target="_blank">Acessar Treinamento</a>
                                 @endif
@@ -167,18 +175,6 @@
                           </div>
                         @endforeach
                       </div>
-
-                      <!-- Se preferir uma listagem simples, sem accordion:
-                      @foreach($categoria->treinamentos as $treinamento)
-                        <div class="text-start mb-2">
-                          <h5>{{ $treinamento->titulo }}</h5>
-                          <p>{{ $treinamento->descricao }}</p>
-                          @if($treinamento->link)
-                            <a href="{{ $treinamento->link }}" class="btn btn-primary btn-sm" target="_blank">Acessar Treinamento</a>
-                          @endif
-                        </div>
-                      @endforeach
-                      -->
                     @else
                       <p>Nenhum treinamento disponível nesta categoria.</p>
                     @endif

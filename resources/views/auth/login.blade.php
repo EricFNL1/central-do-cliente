@@ -109,7 +109,7 @@
   <div class="login-wrapper">
     <!-- Texto de boas-vindas (lado esquerdo) -->
     <div class="welcome-text">
-      <h2>Bem-vindo(a) ao PointCondominio</h2>
+      <h2>Bem-vindo(a) ao Point Central</h2>
       <p>Aqui você gerencia tudo de forma simples e segura. 
         Aproveite todos os recursos que oferecemos para tornar seu dia a dia mais prático.</p>
     </div>

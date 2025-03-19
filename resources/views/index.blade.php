@@ -154,17 +154,17 @@
     </div>
 
     <!-- Comentários Flutuantes Centralizados no P -->
-    <div style="position:absolute; top:30%; left:-13%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+    <div class="ComentarioFlutuante" style="position:absolute; top:30%; left:-13%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
       <span style="color:#6a5acd; font-weight:bold;">Solicitações</span><br>
       Faça sua solicitação
     </div>
 
-    <div style="position:absolute; top:100%; left:7%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+    <div class="ComentarioFlutuante" style="position:absolute; top:100%; left:7%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
       <span style="color:#ff8c00; font-weight:bold;">FAQs</span><br>
       Tire suas dúvidas
     </div>
 
-    <div style="position:absolute; top:-80%; left:15%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+    <div class="ComentarioFlutuante" style="position:absolute; top:-80%; left:15%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
       <span style="color:#32cd32; font-weight:bold;">Faturas</span><br>
       Pegue suas faturas
     </div>
