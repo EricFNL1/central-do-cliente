@@ -24,6 +24,8 @@ use App\Http\Controllers\AdminAcademiaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\Admin\TreinamentoController;
 
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+
 
 Route::prefix('admin')->group(function () {
     // Exibe o formulário de cadastro de categoria
@@ -32,6 +34,12 @@ Route::prefix('admin')->group(function () {
     // Processa o cadastro da categoria
     Route::post('/categorias', [CategoriaController::class, 'store'])->name('admin.categorias.store');
 });
+
+Route::get('/treinamentos/{treinamento}', [TreinamentosController::class, 'show'])->name('treinamentos.show');
+Route::get('/treinamentos/{treinamento}/edit', [TreinamentosController::class, 'edit'])->name('treinamentos.edit');
+Route::put('/treinamentos/{treinamento}', [TreinamentosController::class, 'update'])->name('treinamentos.update');
+Route::get('/treinamentos/{treinamento}', [TreinamentosController::class, 'show'])->name('treinamentos.show');
+
 
 Route::prefix('admin')->group(function () {
     Route::resource('treinamentos', \App\Http\Controllers\Admin\TreinamentoController::class);

@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Central do Cliente</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.ico')}}" />
     <!-- Bootstrap icons-->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
@@ -124,12 +124,26 @@
 </nav>
     
 
-<header class="masthead" id="barra-pesquisa">
+<header class="masthead" id="barra-pesquisa" style="position: relative; overflow: hidden;">
   <!-- Vídeo no fundo -->
-  <video autoplay muted loop style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:-1;">
-    <source src="{{ asset('img/Vídeo.mp4') }}" type="video/mp4">
-    Seu navegador não suporta vídeos.
-  </video>
+  <video
+  autoplay
+  muted
+  loop
+  style="
+    position: absolute;
+    top: 0px;
+    left: 40px;
+    width: 30%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1000000000000;
+  "
+>
+  <source src="{{ asset('img/video2.mp4') }}" type="video/mp4">
+  Seu navegador não suporta vídeos.
+</video>
+
 
   <div class="container position-relative">
     <div class="row justify-content-center">
@@ -139,10 +153,13 @@
           <form class="form-subscribe" id="searchForm" action="{{ route('faqs.search') }}" method="GET">
             <div class="row">
               <div class="col">
-                <input class="form-control form-control-lg" id="searchInput" type="text" name="query" placeholder="Digite sua pesquisa..." />
+                <input class="form-control form-control-lg" id="searchInput" type="text"
+                       name="query" placeholder="Digite sua pesquisa..." />
               </div>
               <div class="col-auto">
-                <button class="btn btn-primary btn-lg" id="searchButton" type="submit">Pesquisar</button>
+                <button class="btn btn-primary btn-lg" id="searchButton" type="submit">
+                  Pesquisar
+                </button>
               </div>
             </div>
           </form>
@@ -153,24 +170,17 @@
       </div>
     </div>
 
-    <!-- Comentários Flutuantes Centralizados no P -->
-    <div class="ComentarioFlutuante" style="position:absolute; top:30%; left:-13%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
-      <span style="color:#6a5acd; font-weight:bold;">Solicitações</span><br>
-      Faça sua solicitação
-    </div>
+    <!-- Exemplo de "cartões" posicionados -->
+    <!-- Exemplo de "cartões" posicionados -->
+ <!-- Containers para os cards (slots fixos) -->
+ <div id="slot1" style="position: absolute; top: 30%; left: -20%;"></div>
+  <div id="slot2" style="position: absolute; top: 100%; left: 7%;"></div>
+  <div id="slot3" style="position: absolute; top: -80%; left: 15%;"></div>
 
-    <div class="ComentarioFlutuante" style="position:absolute; top:100%; left:7%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
-      <span style="color:#ff8c00; font-weight:bold;">FAQs</span><br>
-      Tire suas dúvidas
-    </div>
-
-    <div class="ComentarioFlutuante" style="position:absolute; top:-80%; left:15%; background:#fff; padding:10px 15px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
-      <span style="color:#32cd32; font-weight:bold;">Faturas</span><br>
-      Pegue suas faturas
-    </div>
 
   </div>
 </header>
+
 
 
 
@@ -220,7 +230,7 @@
     </section>
 
 <!-- Image Showcases (mantido) -->
-<section class="showcase">
+<section class="showcase bg-white">
   <!-- As duas primeiras linhas continuam dentro de um container-fluid p-0 -->
   <!-- Lado direito: últimas solicitações -->
   <div class="row g-0">
@@ -639,6 +649,85 @@
 
 <!-- Depois, carrega o script do chat -->
 <script src="js/scripts.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Definindo os dados para cada slot
+  const slots = [
+    {
+      id: 'slot1',
+      items: [
+        { title: "Solicitações", text: "Faça sua solicitação", delay: 0 },
+        { title: "Notificações", text: "Verifique suas notificações", delay: 0 }
+      ],
+      currentIndex: 0
+    },
+    {
+      id: 'slot2',
+      items: [
+        { title: "FAQs", text: "Tire suas dúvidas", delay: 1 },
+        { title: "Atualizações", text: "Novas atualizações disponíveis", delay: 1 }
+      ],
+      currentIndex: 0
+    },
+    {
+      id: 'slot3',
+      items: [
+        { title: "Faturas", text: "Pegue suas faturas", delay: 2 },
+        { title: "Promoções", text: "Confira as promoções", delay: 2 }
+      ],
+      currentIndex: 0
+    }
+  ];
+
+  // Função que cria o HTML de um card
+  function createCardHTML(item) {
+    return `<div class="cardAlert">
+              <span style="font-weight:bold;">${item.title}</span><br>${item.text}
+            </div>`;
+  }
+
+  // Função para animar um slot específico
+  function animateSlot(slot) {
+    const container = document.getElementById(slot.id);
+    container.innerHTML = ""; // limpa o container
+
+    // Pega o item atual
+    const item = slot.items[slot.currentIndex];
+    // Cria o HTML do card
+    container.innerHTML = createCardHTML(item);
+    const card = container.firstElementChild;
+
+    // Força reflow para que a transição funcione (opcional, dependendo do navegador)
+    void card.offsetWidth;
+
+    // Aplica o estado final após o delay
+    setTimeout(() => {
+      card.style.opacity = "1";
+      card.style.transform = "translateY(0)";
+    }, item.delay * 500);
+
+    // Atualiza o índice para o próximo card do slot
+    slot.currentIndex = (slot.currentIndex + 1) % slot.items.length;
+  }
+
+  // Função para animar todos os slots
+  function animateAllSlots() {
+    slots.forEach(slot => {
+      animateSlot(slot);
+    });
+  }
+
+  // Anima inicialmente
+  animateAllSlots();
+
+  // A cada 5 segundos, reanima os slots
+  setInterval(animateAllSlots, 5000);
+});
+</script>
+
+
+
 
   </body>
 </html>

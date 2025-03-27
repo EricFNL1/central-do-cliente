@@ -4,62 +4,34 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Treinamento;
+
 
 class TreinamentoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function show(Treinamento $treinamento)
     {
-        //
+        return view('treinamentos.show', compact('treinamento'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Exibe o formulário de edição
+    public function edit(Treinamento $treinamento)
     {
-        //
+        return view('treinamentos.edit', compact('treinamento'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Atualiza o treinamento no banco
+    public function update(Request $request, Treinamento $treinamento)
     {
-        //
-    }
+        $data = $request->validate([
+            'titulo'   => 'required|string|max:255',
+            'descricao'=> 'nullable|string',
+            'conteudo' => 'nullable|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $treinamento->update($data);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('treinamentos.show', $treinamento->id)
+                         ->with('success', 'Treinamento atualizado com sucesso!');
     }
 }

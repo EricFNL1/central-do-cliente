@@ -1,5 +1,5 @@
 .themepoint{
-    background-color: #33296b;
+    background-color: #2c2c2c;
 }
 .bluepoint{
    color: #22bbd9;
@@ -10,6 +10,22 @@
     border: 1px solid #22bbd9;
     box-sizing: border-box;
 }
+.cardAlert {
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s ease;
+}
+
+.cardAlert.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
 
 .btn:hover{
     background-color: #7ddef2;

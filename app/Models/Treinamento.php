@@ -9,7 +9,7 @@ class Treinamento extends Model
     protected $fillable = [
         'titulo',
         'descricao',
-        'link',
+        'conteudo',
         'categoria_id',
     ];
     

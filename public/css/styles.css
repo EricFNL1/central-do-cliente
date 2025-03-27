@@ -10854,14 +10854,22 @@ textarea.form-control-lg {
   }
 }
 
+
 header.masthead {
   position: relative;
-  background-color: #343a40;
-  background: url("../img/bannerfundo.png") no-repeat center center;
+  background-color: #2c2c2c;
   background-size: cover;
+  background: url("../img/Media1.png") no-repeat center center;
   padding-top: 8rem;
   padding-bottom: 8rem;
 }
+
+@media (max-width: 768px) {
+  .masthead img {
+    display: none; /* ou width: 50%; etc. */
+  }
+}
+
 
 .ComentarioFlutuante{
   color: black;
